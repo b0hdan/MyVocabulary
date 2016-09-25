@@ -37,4 +37,14 @@ public class StorageImpl implements Storage {
         vocabulary.remove(record);
     }
 
+    @Override
+    public int sizeOfActive() {
+        int counter = 0;
+        for (VocabularyRecord record : vocabulary)
+            if (record.isShown())
+                counter++;
+        return counter;
+    }
+
+
 }

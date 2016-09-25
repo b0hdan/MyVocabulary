@@ -41,7 +41,7 @@
     </GridPane>
     <Label fx:id="lblCheck">
         <font>
-         <Font size="20.0"/>
+            <Font size="20.0"/>
         </font>
     </Label>
     <HBox alignment="CENTER_RIGHT" spacing="12.0">

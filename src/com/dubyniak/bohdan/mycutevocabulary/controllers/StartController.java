@@ -20,8 +20,10 @@ public class StartController {
     private Storage storage;
     private Stage allWordsDialog;
     private Stage testDialog;
-    private Parent testDialogRoot;
     static Parent allWordsDialogRoot;
+    private Label lblQuestion;
+    private Label lblCount;
+    private ProgressBar pb;
 
     public StartController() {
         storage = new StorageImpl();
@@ -49,23 +51,28 @@ public class StartController {
             return;
         if (testDialog == null) {
             testDialog = new Stage();
-            testDialogRoot = FXMLLoader.load(getClass().getResource("../fxml/test.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("../fxml/test.fxml"));
             testDialog.setTitle("Test");
             testDialog.setResizable(false);
             testDialog.initModality(Modality.APPLICATION_MODAL);
             testDialog.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
-            testDialog.setScene(new Scene(testDialogRoot, 324, 180));
+            testDialog.setScene(new Scene(root, 310, 191));
             testDialog.show();
-            Label lblQuestion = (Label) testDialogRoot.lookup("#lblQuestion");
-            Label lblCount = (Label) testDialogRoot.lookup("#lblCount");
-            ProgressBar pb = (ProgressBar) testDialogRoot.lookup("#progressBar");
+            lblQuestion = (Label) root.lookup("#lblQuestion");
+            lblCount = (Label) root.lookup("#lblCount");
+            pb = (ProgressBar) root.lookup("#progressBar");
             TestMaker.startTest();
             pb.setProgress(0);
             lblCount.setText("0/" + TestMaker.getRecords().size());
             lblQuestion.setText(TestMaker.getRecords().get(0).getEnglishWord());
         }
-        else
+        else {
+            TestMaker.startTest();
+            pb.setProgress(0);
+            lblCount.setText("0/" + TestMaker.getRecords().size());
+            lblQuestion.setText(TestMaker.getRecords().get(0).getEnglishWord());
             testDialog.show();
+        }
     }
 
     public void closeButtonClicked(ActionEvent actionEvent) {
@@ -76,7 +83,7 @@ public class StartController {
         storage.create(new VocabularyRecord("an apple", "яблуко"));
         storage.create(new VocabularyRecord("a table", "стіл"));
         storage.create(new VocabularyRecord("to write", "писати"));
-        storage.create(new VocabularyRecord("to walk", "гулляти"));
+        storage.create(new VocabularyRecord("to walk", "гуляти"));
         storage.create(new VocabularyRecord("a walk", "прогулянка"));
         storage.create(new VocabularyRecord("sugar", "цукор"));
         storage.create(new VocabularyRecord("salt", "сіль"));

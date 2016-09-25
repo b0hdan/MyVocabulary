@@ -33,5 +33,11 @@
                 <Font name="System Bold" size="28.0"/>
             </font>
         </Button>
+        <Button fx:id="btnShowHide" mnemonicParsing="false" onAction="#showHideButtonClicked" prefHeight="60.0"
+                prefWidth="60.0" text="Hide">
+            <cursor>
+                <Cursor fx:constant="HAND"/>
+            </cursor>
+        </Button>
     </VBox>
 </HBox>

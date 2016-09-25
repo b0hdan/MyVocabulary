@@ -18,8 +18,9 @@ public class TestMaker {
     public static void startTest() {
         records.clear();
         VocabularyRecord temp;
-        for (int i = 0; i < storage.read().size(); i++) {
-            while (records.contains(temp = storage.read().get(random.nextInt(storage.read().size()))));
+        for (int i = 0, n = storage.sizeOfActive(); i < n; i++) {
+            while (records.contains(temp = storage.read().get(random.nextInt(storage.read().size()))) ||
+                    !temp.isShown());
             records.add(temp);
         }
     }

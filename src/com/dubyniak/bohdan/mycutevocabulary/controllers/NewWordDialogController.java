@@ -27,14 +27,24 @@ public class NewWordDialogController {
             return;
         if (((Stage)((Node) actionEvent.getSource()).getScene().getWindow()).getTitle().equals("New word")) {
             VocabularyRecord temp = new VocabularyRecord(txtEnglishWord.getText(), txtUkrainianWord.getText());
-            if (!storage.read().contains(temp))
-                storage.create(temp);
+            for (VocabularyRecord record : storage.read()) {
+                if (record.getEnglishWord().equalsIgnoreCase(temp.getEnglishWord()) ||
+                        record.getUkrainianWord().equalsIgnoreCase(temp.getUkrainianWord()))
+                    return;
+            }
+            storage.create(temp);
         }
         else {
             ListView<VocabularyRecord> lv =
                     (ListView<VocabularyRecord>) StartController.allWordsDialogRoot.lookup("#lvAllWords");
+            for (VocabularyRecord record : storage.read())
+                if (!record.equals(lv.getSelectionModel().getSelectedItem()) &&
+                        (record.getEnglishWord().equalsIgnoreCase(txtEnglishWord.getText()) ||
+                        record.getUkrainianWord().equalsIgnoreCase(txtUkrainianWord.getText())))
+                    return;
             storage.update(lv.getSelectionModel().getSelectedItem(),
-                    new VocabularyRecord(txtEnglishWord.getText(), txtUkrainianWord.getText()));
+                    new VocabularyRecord(txtEnglishWord.getText(), txtUkrainianWord.getText(),
+                            lv.getSelectionModel().getSelectedItem().isShown()));
         }
         ((Node) actionEvent.getSource()).getScene().getWindow().hide();
         clearDialogFields();

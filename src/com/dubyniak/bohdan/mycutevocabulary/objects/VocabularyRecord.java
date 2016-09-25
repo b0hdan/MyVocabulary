@@ -3,11 +3,20 @@ package com.dubyniak.bohdan.mycutevocabulary.objects;
 public class VocabularyRecord {
     private String englishWord;
     private String ukrainianWord;
+    private String hiddenPrefix;
     private boolean isShown = true;
 
     public VocabularyRecord(String englishWord, String ukrainianWord) {
         this.englishWord = englishWord;
         this.ukrainianWord = ukrainianWord;
+        hiddenPrefix = "";
+    }
+
+    public VocabularyRecord(String englishWord, String ukrainianWord, boolean isShown) {
+        this.englishWord = englishWord;
+        this.ukrainianWord = ukrainianWord;
+        this.isShown = isShown;
+        hiddenPrefix = isShown ? "" : "(hidden) ";
     }
 
     public String getEnglishWord() {
@@ -30,13 +39,19 @@ public class VocabularyRecord {
         return isShown;
     }
 
-    public void setShown(boolean shown) {
-        isShown = shown;
+    public void hide() {
+        isShown = false;
+        hiddenPrefix = "(hidden) ";
+    }
+
+    public void show() {
+        isShown = true;
+        hiddenPrefix = "";
     }
 
     @Override
     public String toString() {
-        return englishWord + " - " + ukrainianWord;
+        return hiddenPrefix + englishWord + " - " + ukrainianWord;
     }
 
     @Override
@@ -44,7 +59,7 @@ public class VocabularyRecord {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         VocabularyRecord that = (VocabularyRecord) o;
-        return englishWord.equals(that.englishWord) && ukrainianWord.equals(that.ukrainianWord);
+        return englishWord.equalsIgnoreCase(that.englishWord) && ukrainianWord.equalsIgnoreCase(that.ukrainianWord);
 
     }
 
