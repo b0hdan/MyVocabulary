@@ -62,6 +62,13 @@ public class VocabularyController {
             storage.delete(lvAllWords.getSelectionModel().getSelectedItem());
             refreshList();
         }
+        else if (keyEvent.getCode().isArrowKey())
+            if (lvAllWords.getSelectionModel().getSelectedItem() == null)
+                btnShowHide.setText("Hide");
+            else if (lvAllWords.getSelectionModel().getSelectedItem().isShown())
+                btnShowHide.setText("Hide");
+            else
+                btnShowHide.setText("Show");
     }
 
     public void onMouseClicked(MouseEvent mouseEvent) throws IOException {
