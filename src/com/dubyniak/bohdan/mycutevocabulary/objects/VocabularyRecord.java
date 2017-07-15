@@ -1,38 +1,43 @@
 package com.dubyniak.bohdan.mycutevocabulary.objects;
 
+import java.util.Date;
+
 public class VocabularyRecord {
-    private String englishWord;
-    private String ukrainianWord;
+    public static final int[] LEVELS_OF_POSTPONING = { 1, 3, 7, 14 , 30, 60 };
+    private String foreignWord;
+    private String definition;
     private String hiddenPrefix;
     private boolean isShown = true;
+    private Date showDate;
+    private int rememberingLevel;
 
-    public VocabularyRecord(String englishWord, String ukrainianWord) {
-        this.englishWord = englishWord;
-        this.ukrainianWord = ukrainianWord;
+    public VocabularyRecord(String foreignWord, String definition) {
+        this.foreignWord = foreignWord;
+        this.definition = definition;
         hiddenPrefix = "";
     }
 
-    public VocabularyRecord(String englishWord, String ukrainianWord, boolean isShown) {
-        this.englishWord = englishWord;
-        this.ukrainianWord = ukrainianWord;
+    public VocabularyRecord(String foreignWord, String definition, boolean isShown) {
+        this.foreignWord = foreignWord;
+        this.definition = definition;
         this.isShown = isShown;
         hiddenPrefix = isShown ? "" : "(hidden) ";
     }
 
-    public String getEnglishWord() {
-        return englishWord;
+    public String getForeignWord() {
+        return foreignWord;
     }
 
-    public void setEnglishWord(String englishWord) {
-        this.englishWord = englishWord;
+    public void setForeignWord(String foreignWord) {
+        this.foreignWord = foreignWord;
     }
 
-    public String getUkrainianWord() {
-        return ukrainianWord;
+    public String getDefinition() {
+        return definition;
     }
 
-    public void setUkrainianWord(String ukrainianWord) {
-        this.ukrainianWord = ukrainianWord;
+    public void setDefinition(String definition) {
+        this.definition = definition;
     }
 
     public boolean isShown() {
@@ -49,9 +54,28 @@ public class VocabularyRecord {
         hiddenPrefix = "";
     }
 
+    public Date getShowDate() {
+        return showDate;
+    }
+
+    public void resetShowDateAndRememberingLevel() {
+        showDate = null;
+        rememberingLevel = 0;
+    }
+
+    public void postpone() {
+        showDate = new Date(new Date().getTime() + 1000 * 60 * 60 * 12 * LEVELS_OF_POSTPONING[rememberingLevel]);
+        if (rememberingLevel < LEVELS_OF_POSTPONING.length - 1)
+            rememberingLevel++;
+    }
+
+    public int getNumberOfPostponedDays() {
+        return LEVELS_OF_POSTPONING[rememberingLevel];
+    }
+
     @Override
     public String toString() {
-        return hiddenPrefix + englishWord + " - " + ukrainianWord;
+        return hiddenPrefix + foreignWord + " - " + definition;
     }
 
     @Override
@@ -59,14 +83,14 @@ public class VocabularyRecord {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         VocabularyRecord that = (VocabularyRecord) o;
-        return englishWord.equalsIgnoreCase(that.englishWord) && ukrainianWord.equalsIgnoreCase(that.ukrainianWord);
+        return foreignWord.equalsIgnoreCase(that.foreignWord) && definition.equalsIgnoreCase(that.definition);
 
     }
 
     @Override
     public int hashCode() {
-        int result = englishWord.hashCode();
-        result = 31 * result + ukrainianWord.hashCode();
+        int result = foreignWord.hashCode();
+        result = 31 * result + definition.hashCode();
         return result;
     }
 

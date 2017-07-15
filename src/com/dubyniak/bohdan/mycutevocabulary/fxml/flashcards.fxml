@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="625.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dubyniak.bohdan.mycutevocabulary.controllers.FlashcardsController">
+   <top>
+      <Label text="Label" BorderPane.alignment="CENTER" />
+   </top>
+   <center>
+      <Pane>
+         <VBox fx:id="cardLabelsPane" alignment="CENTER" prefHeight="396.0" prefWidth="694.0" spacing="50.0">
+            <Label fx:id="lblQuestion">
+               <font>
+                  <Font name="System Bold" size="36.0"/>
+               </font>
+            </Label>
+            <Label fx:id="lblAnswer">
+               <font>
+                  <Font size="36.0"/>
+               </font>
+            </Label>
+         </VBox>
+         <BorderPane fx:id="noCardsLabelPane" prefHeight="396.0" prefWidth="694.0" visible="false">
+            <center>
+               <Label text="You have learned&#10;all the words for now!" textAlignment="CENTER"
+                      BorderPane.alignment="CENTER">
+                  <font>
+                     <Font name="System Italic" size="55.0"/>
+                  </font>
+               </Label>
+            </center>
+         </BorderPane>
+      </Pane>
+   </center>
+   <bottom>
+      <Pane prefHeight="120.0" prefWidth="694.0">
+         <HBox fx:id="answerButtonsPane" alignment="CENTER" prefWidth="694.0" spacing="54.0">
+            <Button mnemonicParsing="false" onAction="#negativeButtonClicked" prefHeight="120.0" prefWidth="320.0"
+                    text="I don't know&#10;this word" textAlignment="CENTER">
+               <font>
+                  <Font size="32.0"/>
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND"/>
+               </cursor>
+            </Button>
+            <Button fx:id="btnPositive" mnemonicParsing="false" onAction="#positiveButtonPressed" prefHeight="120.0"
+                    prefWidth="320.0" textAlignment="CENTER">
+               <font>
+                  <Font size="32.0"/>
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND"/>
+               </cursor>
+            </Button>
+         </HBox>
+         <HBox fx:id="checkButtonPane" alignment="CENTER" prefWidth="694.0" visible="false">
+            <Button alignment="CENTER" defaultButton="true" mnemonicParsing="false" onAction="#checkButtonClicked"
+                    prefHeight="120.0" prefWidth="320.0" text="Check">
+               <opaqueInsets>
+                  <Insets/>
+               </opaqueInsets>
+               <font>
+                  <Font size="32.0"/>
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND"/>
+               </cursor>
+            </Button>
+         </HBox>
+      </Pane>
+   </bottom>
+   <padding>
+      <Insets bottom="53.0" left="53.0" right="53.0" top="35.0" />
+   </padding>
+</BorderPane>

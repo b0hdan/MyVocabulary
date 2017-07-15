@@ -9,6 +9,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.stage.Modality;
@@ -19,16 +21,21 @@ import java.io.IOException;
 public class StartController {
     private Storage storage;
     private Stage allWordsDialog;
+    private Stage flashcardsDialog;
     private Stage testDialog;
     static Parent allWordsDialogRoot;
     private Label lblQuestion;
     private Label lblCount;
     private ProgressBar pb;
+    private VocabularyController vocabularyController;
+    private FlashcardsController flashcardsController;
+    private FXMLLoader flashcardsFXMLLoader;
 
     public StartController() {
         storage = new StorageImpl();
         VocabularyController.setStorage(storage);
         NewWordDialogController.setStorage(storage);
+        FlashcardsController.setStorage(storage);
         TestMaker.setStorage(storage);
         fillTestData();
     }
@@ -36,43 +43,59 @@ public class StartController {
     public void myVocabularyButtonClicked(ActionEvent actionEvent) throws IOException {
         if (allWordsDialog == null) {
             allWordsDialog = new Stage();
-            allWordsDialogRoot = FXMLLoader.load(getClass().getResource("../fxml/my-vocabulary.fxml"));
+            FXMLLoader vocabularyFXMLLoader = new FXMLLoader(getClass().getResource("../fxml/my-vocabulary.fxml"));
+            allWordsDialogRoot = vocabularyFXMLLoader.load();
+            vocabularyController = vocabularyFXMLLoader.getController();
             allWordsDialog.setTitle("All words");
             allWordsDialog.setResizable(false);
             allWordsDialog.initModality(Modality.APPLICATION_MODAL);
             allWordsDialog.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
             allWordsDialog.setScene(new Scene(allWordsDialogRoot, 450, 400));
+            allWordsDialog.setOnCloseRequest(event -> vocabularyController.btnShowHide.setText("Hide"));
         }
-        allWordsDialog.showAndWait();
+        vocabularyController.refreshList();
+        vocabularyController.lvAllWords.getSelectionModel().select(null);
+        allWordsDialog.show();
+    }
+
+    public void flashcardsButtonClicked(ActionEvent actionEvent) throws IOException {
+        if (flashcardsDialog == null) {
+            flashcardsDialog = new Stage();
+            flashcardsFXMLLoader = new FXMLLoader(getClass().getResource("../fxml/flashcards.fxml"));
+            Parent root = flashcardsFXMLLoader.load();
+            flashcardsController = flashcardsFXMLLoader.getController();
+            flashcardsDialog.setTitle("Flashcards");
+            flashcardsDialog.setResizable(false);
+            flashcardsDialog.initModality(Modality.APPLICATION_MODAL);
+            flashcardsDialog.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
+            flashcardsDialog.setScene(new Scene((root)));
+        }
+        flashcardsController.start();
+        flashcardsDialog.show();
     }
 
     public void testButtonClicked(ActionEvent actionEvent) throws IOException {
-        if (storage.read().size() == 0)
+        if (storage.read().size() == 0) {
+            new Alert(Alert.AlertType.ERROR, "Cannot start the test! Storage is empty.", ButtonType.OK).show();
             return;
-        if (testDialog == null) {
+        }
+        else if (testDialog == null) {
             testDialog = new Stage();
             Parent root = FXMLLoader.load(getClass().getResource("../fxml/test.fxml"));
             testDialog.setTitle("Test");
             testDialog.setResizable(false);
             testDialog.initModality(Modality.APPLICATION_MODAL);
             testDialog.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
-            testDialog.setScene(new Scene(root, 310, 191));
-            testDialog.show();
+            testDialog.setScene(new Scene(root, 321, 191));
             lblQuestion = (Label) root.lookup("#lblQuestion");
             lblCount = (Label) root.lookup("#lblCount");
             pb = (ProgressBar) root.lookup("#progressBar");
-            TestMaker.startTest();
-            pb.setProgress(0);
-            lblCount.setText("0/" + TestMaker.getRecords().size());
-            lblQuestion.setText(TestMaker.getRecords().get(0).getEnglishWord());
         }
-        else {
-            TestMaker.startTest();
-            pb.setProgress(0);
-            lblCount.setText("0/" + TestMaker.getRecords().size());
-            lblQuestion.setText(TestMaker.getRecords().get(0).getEnglishWord());
-            testDialog.show();
-        }
+        TestMaker.startTest();
+        pb.setProgress(0);
+        lblCount.setText("0/" + TestMaker.getRecords().size());
+        lblQuestion.setText(TestMaker.getRecords().get(0).getForeignWord());
+        testDialog.show();
     }
 
     public void closeButtonClicked(ActionEvent actionEvent) {
@@ -92,5 +115,4 @@ public class StartController {
         storage.create(new VocabularyRecord("a pen", "ручка"));
         storage.create(new VocabularyRecord("a pencil", "олівець"));
     }
-
 }

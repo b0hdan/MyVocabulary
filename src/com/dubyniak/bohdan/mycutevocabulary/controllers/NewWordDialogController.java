@@ -13,23 +13,22 @@ public class NewWordDialogController {
     private static Storage storage;
 
     @FXML
-    TextField txtEnglishWord;
-
+    private TextField txtForeignWord;
     @FXML
-    TextField txtUkrainianWord;
+    private TextField txtDefinition;
 
     static void setStorage(Storage storage) {
         NewWordDialogController.storage = storage;
     }
 
     public void putInButtonClicked(ActionEvent actionEvent) {
-        if (txtEnglishWord.getText().equals("") || txtUkrainianWord.getText().equals(""))
+        if (txtForeignWord.getText().equals("") || txtDefinition.getText().equals(""))
             return;
         if (((Stage)((Node) actionEvent.getSource()).getScene().getWindow()).getTitle().equals("New word")) {
-            VocabularyRecord temp = new VocabularyRecord(txtEnglishWord.getText(), txtUkrainianWord.getText());
+            VocabularyRecord temp = new VocabularyRecord(txtForeignWord.getText(), txtDefinition.getText());
             for (VocabularyRecord record : storage.read()) {
-                if (record.getEnglishWord().equalsIgnoreCase(temp.getEnglishWord()) ||
-                        record.getUkrainianWord().equalsIgnoreCase(temp.getUkrainianWord()))
+                if (record.getForeignWord().equalsIgnoreCase(temp.getForeignWord()) ||
+                        record.getDefinition().equalsIgnoreCase(temp.getDefinition()))
                     return;
             }
             storage.create(temp);
@@ -39,11 +38,11 @@ public class NewWordDialogController {
                     (ListView<VocabularyRecord>) StartController.allWordsDialogRoot.lookup("#lvAllWords");
             for (VocabularyRecord record : storage.read())
                 if (!record.equals(lv.getSelectionModel().getSelectedItem()) &&
-                        (record.getEnglishWord().equalsIgnoreCase(txtEnglishWord.getText()) ||
-                        record.getUkrainianWord().equalsIgnoreCase(txtUkrainianWord.getText())))
+                        (record.getForeignWord().equalsIgnoreCase(txtForeignWord.getText()) ||
+                        record.getDefinition().equalsIgnoreCase(txtDefinition.getText())))
                     return;
             storage.update(lv.getSelectionModel().getSelectedItem(),
-                    new VocabularyRecord(txtEnglishWord.getText(), txtUkrainianWord.getText(),
+                    new VocabularyRecord(txtForeignWord.getText(), txtDefinition.getText(),
                             lv.getSelectionModel().getSelectedItem().isShown()));
         }
         ((Node) actionEvent.getSource()).getScene().getWindow().hide();
@@ -56,9 +55,8 @@ public class NewWordDialogController {
     }
 
     private void clearDialogFields() {
-        txtEnglishWord.clear();
-        txtUkrainianWord.clear();
-        txtEnglishWord.requestFocus();
+        txtForeignWord.clear();
+        txtDefinition.clear();
+        txtForeignWord.requestFocus();
     }
-
 }

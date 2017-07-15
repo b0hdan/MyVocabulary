@@ -77,8 +77,8 @@ public class VocabularyController {
         else if (mouseEvent.getClickCount() == 2) {
             if (newWordDialog == null)
                 initializeNewWordDialog((Stage) ((Node) mouseEvent.getSource()).getScene().getWindow());
-            txtEN.setText(storage.read().get(lvAllWords.getSelectionModel().getSelectedIndex()).getEnglishWord());
-            txtUA.setText(storage.read().get(lvAllWords.getSelectionModel().getSelectedIndex()).getUkrainianWord());
+            txtEN.setText(storage.read().get(lvAllWords.getSelectionModel().getSelectedIndex()).getForeignWord());
+            txtUA.setText(storage.read().get(lvAllWords.getSelectionModel().getSelectedIndex()).getDefinition());
             newWordDialog.setTitle("Edit record");
             txtEN.selectAll();
             newWordDialog.showAndWait();
@@ -104,7 +104,7 @@ public class VocabularyController {
         }
     }
 
-    private void refreshList() {
+    void refreshList() {
         if (lvAllWords.getSelectionModel().getSelectedItem() == null) {
             lvAllWords.setItems(null);
             lvAllWords.setItems(list);
@@ -126,7 +126,7 @@ public class VocabularyController {
         newWordDialog.setResizable(false);
         newWordDialog.initModality(Modality.APPLICATION_MODAL);
         newWordDialog.initOwner(owner);
-        newWordDialog.setScene(new Scene(root, 284, 144));
+        newWordDialog.setScene(new Scene(root, 272, 144));
         txtEN = (TextField) newWordDialog.getScene().lookup("#txtEnglishWord");
         txtUA = (TextField) newWordDialog.getScene().lookup("#txtUkrainianWord");
         newWordDialog.setOnCloseRequest(event -> {

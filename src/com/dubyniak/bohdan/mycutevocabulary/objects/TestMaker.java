@@ -15,9 +15,13 @@ public class TestMaker {
         TestMaker.storage = storage;
     }
 
-    public static void startTest() {
+    public static void startTest() throws UnsupportedOperationException {
         records.clear();
         VocabularyRecord temp;
+        if (storage.sizeOfActive() == 0) {
+            if (storage.read().size() == 0) throw new UnsupportedOperationException("There are no elements in the storage.");
+            storage.read().forEach(VocabularyRecord::show);
+        }
         for (int i = 0, n = storage.sizeOfActive(); i < n; i++) {
             while (records.contains(temp = storage.read().get(random.nextInt(storage.read().size()))) ||
                     !temp.isShown());

@@ -14,33 +14,34 @@ public class TestController {
     private int currentQuestion, correctAnswers;
 
     @FXML
-    ProgressBar progressBar;
+    private ProgressBar progressBar;
 
     @FXML
-    Label lblQuestion;
+    private Label lblQuestion;
 
     @FXML
-    TextField txtAnswer;
+    private TextField txtAnswer;
 
     @FXML
-    Button btnNext;
+    private Button btnNext;
 
     @FXML
-    Label lblCheck;
+    private Label lblCheck;
     
     @FXML
-    Label lblCount;
+    private Label lblCount;
 
     public void nextButtonClicked(ActionEvent actionEvent) {
         ((Node) actionEvent.getSource()).getScene().getWindow().setOnCloseRequest(event -> restartTest());
         if (btnNext.getText().equals("Check")) {
-            if (TestMaker.getRecords().get(currentQuestion).getUkrainianWord().equalsIgnoreCase(txtAnswer.getText())) {
+            if (TestMaker.getRecords().get(currentQuestion).getDefinition().equalsIgnoreCase(txtAnswer.getText())) {
                 correctAnswers++;
+                TestMaker.getRecords().get(currentQuestion).hide();
                 lblCheck.setText("Correct!");
                 lblCheck.setTextFill(Paint.valueOf("Green"));
             } else {
                 lblCheck.setText("Incorrect! (answer: " +
-                        TestMaker.getRecords().get(currentQuestion).getUkrainianWord() + ")");
+                        TestMaker.getRecords().get(currentQuestion).getDefinition() + ")");
                 lblCheck.setTextFill(Paint.valueOf("Red"));
             }
             txtAnswer.setEditable(false);
@@ -54,7 +55,7 @@ public class TestController {
         } else if (btnNext.getText().equals("Restart"))
             restartTest();
         else if (btnNext.getText().equals("Next")) {
-            lblQuestion.setText(TestMaker.getRecords().get(currentQuestion).getEnglishWord());
+            lblQuestion.setText(TestMaker.getRecords().get(currentQuestion).getForeignWord());
             txtAnswer.clear();
             txtAnswer.requestFocus();
             lblCheck.setText("");
@@ -72,7 +73,7 @@ public class TestController {
         txtAnswer.setEditable(true);
         btnNext.setText("Check");
         TestMaker.startTest();
-        lblQuestion.setText(TestMaker.getRecords().get(0).getEnglishWord());
+        lblQuestion.setText(TestMaker.getRecords().get(0).getForeignWord());
         progressBar.setProgress(0);
         lblCount.setText("0/" + TestMaker.getRecords().size());
     }
