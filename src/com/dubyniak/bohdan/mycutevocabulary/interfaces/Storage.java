@@ -14,6 +14,8 @@ public interface Storage {
 
     void delete(VocabularyRecord record);
 
+    void saveVocabulary();
+
     int sizeOfActive();
 
 }

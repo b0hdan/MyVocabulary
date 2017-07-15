@@ -13,10 +13,6 @@ public class StorageImpl implements Storage {
         vocabulary = new ArrayList<>();
     }
 
-    public StorageImpl(List<VocabularyRecord> vocabulary) {
-        this.vocabulary = vocabulary;
-    }
-
     @Override
     public void create(VocabularyRecord record) {
         vocabulary.add(record);
@@ -38,6 +34,11 @@ public class StorageImpl implements Storage {
     }
 
     @Override
+    public void saveVocabulary() {
+
+    }
+
+    @Override
     public int sizeOfActive() {
         int counter = 0;
         for (VocabularyRecord record : vocabulary)
@@ -45,6 +46,4 @@ public class StorageImpl implements Storage {
                 counter++;
         return counter;
     }
-
-
 }

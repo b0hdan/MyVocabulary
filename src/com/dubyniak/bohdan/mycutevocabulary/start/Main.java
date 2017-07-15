@@ -1,5 +1,6 @@
 package com.dubyniak.bohdan.mycutevocabulary.start;
 
+import com.dubyniak.bohdan.mycutevocabulary.controllers.StartController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,7 +11,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("../fxml/start-window.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../fxml/start-window.fxml"));
+        Parent root = fxmlLoader.load();
+        primaryStage.setOnCloseRequest(event -> ((StartController) fxmlLoader.getController()).save());
         primaryStage.setTitle("My cute vocabulary");
         primaryStage.setResizable(false);
         primaryStage.setScene(new Scene(root, 624, 416));

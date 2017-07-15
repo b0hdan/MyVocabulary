@@ -1,7 +1,7 @@
 package com.dubyniak.bohdan.mycutevocabulary.controllers;
 
 import com.dubyniak.bohdan.mycutevocabulary.interfaces.Storage;
-import com.dubyniak.bohdan.mycutevocabulary.interfaces.impls.StorageImpl;
+import com.dubyniak.bohdan.mycutevocabulary.interfaces.impls.FileStorage;
 import com.dubyniak.bohdan.mycutevocabulary.objects.TestMaker;
 import com.dubyniak.bohdan.mycutevocabulary.objects.VocabularyRecord;
 import javafx.event.ActionEvent;
@@ -29,15 +29,14 @@ public class StartController {
     private ProgressBar pb;
     private VocabularyController vocabularyController;
     private FlashcardsController flashcardsController;
-    private FXMLLoader flashcardsFXMLLoader;
 
     public StartController() {
-        storage = new StorageImpl();
+        storage = new FileStorage();
         VocabularyController.setStorage(storage);
         NewWordDialogController.setStorage(storage);
         FlashcardsController.setStorage(storage);
         TestMaker.setStorage(storage);
-        fillTestData();
+//        fillTestData();
     }
 
     public void myVocabularyButtonClicked(ActionEvent actionEvent) throws IOException {
@@ -61,7 +60,7 @@ public class StartController {
     public void flashcardsButtonClicked(ActionEvent actionEvent) throws IOException {
         if (flashcardsDialog == null) {
             flashcardsDialog = new Stage();
-            flashcardsFXMLLoader = new FXMLLoader(getClass().getResource("../fxml/flashcards.fxml"));
+            FXMLLoader flashcardsFXMLLoader = new FXMLLoader(getClass().getResource("../fxml/flashcards.fxml"));
             Parent root = flashcardsFXMLLoader.load();
             flashcardsController = flashcardsFXMLLoader.getController();
             flashcardsDialog.setTitle("Flashcards");
@@ -70,6 +69,7 @@ public class StartController {
             flashcardsDialog.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
             flashcardsDialog.setScene(new Scene((root)));
         }
+        flashcardsController.btnPositive.requestFocus();
         flashcardsController.start();
         flashcardsDialog.show();
     }
@@ -100,6 +100,11 @@ public class StartController {
 
     public void closeButtonClicked(ActionEvent actionEvent) {
         ((Node) actionEvent.getSource()).getScene().getWindow().hide();
+        save();
+    }
+
+    public void save() {
+        storage.saveVocabulary();
     }
 
     private void fillTestData() {

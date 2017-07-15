@@ -1,8 +1,9 @@
 package com.dubyniak.bohdan.mycutevocabulary.objects;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class VocabularyRecord {
+public class VocabularyRecord implements Serializable {
     public static final int[] LEVELS_OF_POSTPONING = { 1, 3, 7, 14 , 30, 60 };
     private String foreignWord;
     private String definition;
@@ -64,7 +65,9 @@ public class VocabularyRecord {
     }
 
     public void postpone() {
-        showDate = new Date(new Date().getTime() + 1000 * 60 * 60 * 12 * LEVELS_OF_POSTPONING[rememberingLevel]);
+        System.out.println(showDate);
+        showDate = new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * LEVELS_OF_POSTPONING[rememberingLevel]);
+        System.out.println(foreignWord);
         if (rememberingLevel < LEVELS_OF_POSTPONING.length - 1)
             rememberingLevel++;
     }
