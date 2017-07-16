@@ -39,6 +39,8 @@ public class FileStorage implements Storage {
     @Override
     public void updateVocabulary(String oldVocabularyName, String newVocabularyName) {
         vocabularies.set(vocabularies.indexOf(oldVocabularyName), newVocabularyName);
+        if (!new File(oldVocabularyName + ".dat").renameTo(new File(newVocabularyName + ".dat")))
+            System.out.println("Не вдалося перейменувати файл.");
     }
 
     @Override

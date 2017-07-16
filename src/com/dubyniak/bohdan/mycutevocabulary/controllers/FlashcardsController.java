@@ -101,7 +101,6 @@ public class FlashcardsController {
     }
 
     public void positiveButtonPressed(ActionEvent actionEvent) {
-        System.out.println("FlashcardsController.positiveButtonPressed");
         flashcards.get(currentCard).postpone();
         flashcards.remove(currentCard);
         if (flashcards.size() != 0)

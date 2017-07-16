@@ -41,7 +41,6 @@ public class NewWordDialogController {
             storage.create(temp);
         }
         else {
-
             for (VocabularyRecord record : storage.read())
                 if (!record.equals(lv.getSelectionModel().getSelectedItem()) &&
                         (record.getForeignWord().equalsIgnoreCase(txtForeignWord.getText()) ||
@@ -50,6 +49,7 @@ public class NewWordDialogController {
             storage.update(lv.getSelectionModel().getSelectedItem(),
                     new VocabularyRecord(txtForeignWord.getText(), txtDefinition.getText(),
                             lv.getSelectionModel().getSelectedItem().isShown()));
+            ((Node) actionEvent.getSource()).getScene().getWindow().hide();
         }
         ObservableList<VocabularyRecord> list = FXCollections.observableList(storage.read());
         Collections.sort(list, (o1, o2) -> o1.getForeignWord().compareTo(o2.getForeignWord()));
