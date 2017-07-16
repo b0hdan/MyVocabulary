@@ -10,9 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -21,6 +19,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Optional;
 
 public class VocabularyController {
     private Stage newWordDialog;
@@ -78,6 +77,10 @@ public class VocabularyController {
         if (lvAllWords.getSelectionModel().getSelectedItem() == null)
             btnShowHide.setText("Hide");
         else if (mouseEvent.getClickCount() == 2) {
+            Optional<ButtonType> result = new Alert(Alert.AlertType.CONFIRMATION,
+                    "Are you sure you want to edit this word? In that case its remembering level will be reset.",
+                    ButtonType.YES, ButtonType.NO).showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.NO) return;
             if (newWordDialog == null)
                 initializeNewWordDialog((Stage) ((Node) mouseEvent.getSource()).getScene().getWindow());
             txtForeignWord.setText(storage.read().get(lvAllWords.getSelectionModel().getSelectedIndex()).getForeignWord());
