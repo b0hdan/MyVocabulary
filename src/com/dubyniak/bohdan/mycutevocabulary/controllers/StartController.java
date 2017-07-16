@@ -5,6 +5,7 @@ import com.dubyniak.bohdan.mycutevocabulary.interfaces.impls.FileStorage;
 import com.dubyniak.bohdan.mycutevocabulary.objects.TestMaker;
 import com.dubyniak.bohdan.mycutevocabulary.objects.VocabularyRecord;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -20,44 +21,61 @@ import java.io.IOException;
 
 public class StartController {
     private Storage storage;
-    private Stage allWordsDialog;
+    private Stage directoriesDialog;
+    private Stage directoryChooserDialog;
     private Stage flashcardsDialog;
     private Stage testDialog;
     static Parent allWordsDialogRoot;
     private Label lblQuestion;
     private Label lblCount;
     private ProgressBar pb;
-    private VocabularyController vocabularyController;
+    private DirectoriesController directoriesController;
     private FlashcardsController flashcardsController;
 
     public StartController() {
         storage = new FileStorage();
+        DirectoriesController.setStorage(storage);
+        NewDirectoryDialogController.setStorage(storage);
         VocabularyController.setStorage(storage);
         NewWordDialogController.setStorage(storage);
+        DirectoryChooserController.setStorage(storage);
         FlashcardsController.setStorage(storage);
         TestMaker.setStorage(storage);
 //        fillTestData();
     }
 
-    public void myVocabularyButtonClicked(ActionEvent actionEvent) throws IOException {
-        if (allWordsDialog == null) {
-            allWordsDialog = new Stage();
-            FXMLLoader vocabularyFXMLLoader = new FXMLLoader(getClass().getResource("../fxml/my-vocabulary.fxml"));
-            allWordsDialogRoot = vocabularyFXMLLoader.load();
-            vocabularyController = vocabularyFXMLLoader.getController();
-            allWordsDialog.setTitle("All words");
-            allWordsDialog.setResizable(false);
-            allWordsDialog.initModality(Modality.APPLICATION_MODAL);
-            allWordsDialog.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
-            allWordsDialog.setScene(new Scene(allWordsDialogRoot, 450, 400));
-            allWordsDialog.setOnCloseRequest(event -> vocabularyController.btnShowHide.setText("Hide"));
+    public void directoriesButtonClicked(ActionEvent actionEvent) throws IOException {
+        if (directoriesDialog == null) {
+            directoriesDialog = new Stage();
+            FXMLLoader directoriesFXMLLoader = new FXMLLoader(getClass().getResource("../fxml/directories.fxml"));
+            allWordsDialogRoot = directoriesFXMLLoader.load();
+            directoriesController = directoriesFXMLLoader.getController();
+            directoriesDialog.setTitle("All directories");
+            directoriesDialog.setResizable(false);
+            directoriesDialog.initModality(Modality.APPLICATION_MODAL);
+            directoriesDialog.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
+            directoriesDialog.setScene(new Scene(allWordsDialogRoot, 450, 400));
+            directoriesDialog.setOnCloseRequest(event -> directoriesController.close());
         }
-        vocabularyController.refreshList();
-        vocabularyController.lvAllWords.getSelectionModel().select(null);
-        allWordsDialog.show();
+        directoriesController.refreshList();
+        directoriesController.lvAllDirectories.getSelectionModel().select(null);
+        directoriesDialog.show();
     }
 
     public void flashcardsButtonClicked(ActionEvent actionEvent) throws IOException {
+        if (directoryChooserDialog == null) {
+            directoryChooserDialog = new Stage();
+            Parent root = FXMLLoader.load(getClass().getResource("../fxml/directory-chooser.fxml"));
+            directoryChooserDialog.setTitle("Choose a directory");
+            directoryChooserDialog.setResizable(false);
+            directoryChooserDialog.initModality(Modality.APPLICATION_MODAL);
+            directoryChooserDialog.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
+            directoryChooserDialog.setScene(new Scene(root));
+        }
+        directoryChooserDialog.setOnCloseRequest(Event::consume);
+        directoryChooserDialog.showAndWait();
+
+
         if (flashcardsDialog == null) {
             flashcardsDialog = new Stage();
             FXMLLoader flashcardsFXMLLoader = new FXMLLoader(getClass().getResource("../fxml/flashcards.fxml"));
@@ -69,6 +87,7 @@ public class StartController {
             flashcardsDialog.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
             flashcardsDialog.setScene(new Scene((root)));
         }
+        flashcardsDialog.setOnCloseRequest(event -> flashcardsController.close(storage.getLastVocabularyName()));
         flashcardsController.btnPositive.requestFocus();
         flashcardsController.start();
         flashcardsDialog.show();
@@ -100,11 +119,6 @@ public class StartController {
 
     public void closeButtonClicked(ActionEvent actionEvent) {
         ((Node) actionEvent.getSource()).getScene().getWindow().hide();
-        save();
-    }
-
-    public void save() {
-        storage.saveVocabulary();
     }
 
     private void fillTestData() {

@@ -3,22 +3,27 @@ package com.dubyniak.bohdan.mycutevocabulary.interfaces.impls;
 import com.dubyniak.bohdan.mycutevocabulary.interfaces.Storage;
 import com.dubyniak.bohdan.mycutevocabulary.objects.VocabularyRecord;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FileStorage implements Storage {
     private List<VocabularyRecord> vocabulary;
+    private List<String> directories;
+    private String lastVocabularyName;
 
     public FileStorage() {
-        vocabulary = loadVocabulary();
+        directories = loadDirectories();
     }
 
     @Override
     public void create(VocabularyRecord record) {
         vocabulary.add(record);
+    }
+
+    @Override
+    public void create(String directory) {
+        directories.add(directory);
     }
 
     @Override
@@ -32,8 +37,18 @@ public class FileStorage implements Storage {
     }
 
     @Override
-    public void delete(VocabularyRecord record) {
+    public void updateDirectory(String oldDirectory, String newDirectory) {
+        directories.set(directories.indexOf(oldDirectory), newDirectory);
+    }
+
+    @Override
+    public void deleteDirectory(VocabularyRecord record) {
         vocabulary.remove(record);
+    }
+
+    @Override
+    public void deleteDirectory(String directory) {
+        directories.remove(directory);
     }
 
     @Override
@@ -46,8 +61,8 @@ public class FileStorage implements Storage {
     }
 
     @Override
-    public void saveVocabulary() {
-        try (FileOutputStream fos = new FileOutputStream("vocabulary.dat");
+    public void saveVocabulary(String vocabularyName) {
+        try (FileOutputStream fos = new FileOutputStream(vocabularyName + ".dat");
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(vocabulary);
             oos.flush();
@@ -56,14 +71,49 @@ public class FileStorage implements Storage {
         }
     }
 
-    private List<VocabularyRecord> loadVocabulary() {
-        List<VocabularyRecord> vocabulary = null;
-        try (FileInputStream fis = new FileInputStream("vocabulary.dat");
-             ObjectInputStream ois = new ObjectInputStream(fis)) {
-            vocabulary = (List<VocabularyRecord>) ois.readObject();
+    @Override
+    public void loadVocabulary(String vocabularyName) {
+        lastVocabularyName = vocabularyName;
+        vocabulary = new ArrayList<>();
+        if (new File(vocabularyName + ".dat").exists())
+            try (FileInputStream fis = new FileInputStream(vocabularyName + ".dat");
+                 ObjectInputStream ois = new ObjectInputStream(fis)) {
+                vocabulary = (List<VocabularyRecord>) ois.readObject();
+            } catch (Exception ex) {
+                System.out.println("Помилка при завантаженні об'єкта!");
+            }
+    }
+
+    @Override
+    public void saveDirectories() {
+        try (FileOutputStream fos = new FileOutputStream("directories.dat");
+             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+            oos.writeObject(directories);
+            oos.flush();
         } catch (Exception ex) {
-            System.out.println("Помилка при завантаженні об'єкта!");
+            System.out.println("Помилка при збереженні об'єкта!");
         }
-        return vocabulary;
+    }
+
+    private List<String> loadDirectories() {
+        List<String> directories = new ArrayList<>();
+        if (new File("directories.dat").exists())
+            try (FileInputStream fis = new FileInputStream("directories.dat");
+                 ObjectInputStream ois = new ObjectInputStream(fis)) {
+                directories = (List<String>) ois.readObject();
+            } catch (Exception ex) {
+                System.out.println("Помилка при завантаженні об'єкта!");
+            }
+        return directories;
+    }
+
+    @Override
+    public List<String> getDirectories() {
+        return directories;
+    }
+
+    @Override
+    public String getLastVocabularyName() {
+        return lastVocabularyName;
     }
 }

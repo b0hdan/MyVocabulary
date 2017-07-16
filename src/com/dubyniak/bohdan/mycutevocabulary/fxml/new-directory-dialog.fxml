@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dubyniak.bohdan.mycutevocabulary.controllers.NewWordDialogController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dubyniak.bohdan.mycutevocabulary.controllers.NewDirectoryDialogController">
     <padding>
         <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
     </padding>
@@ -22,18 +22,15 @@
         </columnConstraints>
         <rowConstraints>
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
         <VBox.margin>
             <Insets bottom="17.0" />
         </VBox.margin>
-        <Label text="Foreign word:" />
-        <Label text="Definition:" GridPane.rowIndex="1" />
-        <TextField fx:id="txtForeignWord" GridPane.columnIndex="1" />
-        <TextField fx:id="txtDefinition" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <Label text="Directory name" />
+        <TextField fx:id="txtDirectoryName" GridPane.columnIndex="1" />
     </GridPane>
     <HBox alignment="CENTER_RIGHT" prefWidth="200.0" spacing="12.0">
-        <Button defaultButton="true" focusTraversable="false" mnemonicParsing="false" onAction="#putInButtonClicked" text="Put in">
+        <Button defaultButton="true" focusTraversable="false" mnemonicParsing="false" onAction="#createButtonClicked" text="Create">
             <cursor>
                 <Cursor fx:constant="HAND" />
             </cursor>

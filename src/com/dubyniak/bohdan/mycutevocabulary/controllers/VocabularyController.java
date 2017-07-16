@@ -20,13 +20,14 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Collections;
 
 public class VocabularyController {
     private Stage newWordDialog;
     private static Storage storage;
     private ObservableList<VocabularyRecord> list;
-    private TextField txtEN;
-    private TextField txtUA;
+    private TextField txtForeignWord;
+    private TextField txtDefinition;
 
     @FXML
     ListView<VocabularyRecord> lvAllWords;
@@ -38,6 +39,7 @@ public class VocabularyController {
     private void initialize() {
         list = FXCollections.observableList(storage.read());
         lvAllWords.setItems(list);
+        Collections.sort(list, (o1, o2) -> o1.getForeignWord().compareTo(o2.getForeignWord()));
     }
 
     static void setStorage(Storage storage) {
@@ -49,17 +51,18 @@ public class VocabularyController {
             initializeNewWordDialog((Stage) ((Node) actionEvent.getSource()).getScene().getWindow());
         newWordDialog.setTitle("New word");
         newWordDialog.showAndWait();
+        Collections.sort(list, (o1, o2) -> o1.getForeignWord().compareTo(o2.getForeignWord()));
         refreshList();
     }
 
     public void minusButtonClicked(ActionEvent actionEvent) {
-        storage.delete(lvAllWords.getSelectionModel().getSelectedItem());
+        storage.deleteDirectory(lvAllWords.getSelectionModel().getSelectedItem());
         refreshList();
     }
 
     public void onKeyReleased(KeyEvent keyEvent) {
         if (keyEvent.getCode().equals(KeyCode.DELETE)) {
-            storage.delete(lvAllWords.getSelectionModel().getSelectedItem());
+            storage.deleteDirectory(lvAllWords.getSelectionModel().getSelectedItem());
             refreshList();
         }
         else if (keyEvent.getCode().isArrowKey())
@@ -77,10 +80,10 @@ public class VocabularyController {
         else if (mouseEvent.getClickCount() == 2) {
             if (newWordDialog == null)
                 initializeNewWordDialog((Stage) ((Node) mouseEvent.getSource()).getScene().getWindow());
-            txtEN.setText(storage.read().get(lvAllWords.getSelectionModel().getSelectedIndex()).getForeignWord());
-            txtUA.setText(storage.read().get(lvAllWords.getSelectionModel().getSelectedIndex()).getDefinition());
+            txtForeignWord.setText(storage.read().get(lvAllWords.getSelectionModel().getSelectedIndex()).getForeignWord());
+            txtDefinition.setText(storage.read().get(lvAllWords.getSelectionModel().getSelectedIndex()).getDefinition());
             newWordDialog.setTitle("Edit record");
-            txtEN.selectAll();
+            txtForeignWord.selectAll();
             newWordDialog.showAndWait();
             refreshList();
         }
@@ -127,13 +130,22 @@ public class VocabularyController {
         newWordDialog.initModality(Modality.APPLICATION_MODAL);
         newWordDialog.initOwner(owner);
         newWordDialog.setScene(new Scene(root, 272, 144));
-        txtEN = (TextField) newWordDialog.getScene().lookup("#txtForeignWord");
-        txtUA = (TextField) newWordDialog.getScene().lookup("#txtDefinition");
+        txtForeignWord = (TextField) newWordDialog.getScene().lookup("#txtForeignWord");
+        txtDefinition = (TextField) newWordDialog.getScene().lookup("#txtDefinition");
         newWordDialog.setOnCloseRequest(event -> {
-            txtEN.clear();
-            txtUA.clear();
-            txtEN.requestFocus();
+            txtForeignWord.clear();
+            txtDefinition.clear();
+            txtForeignWord.requestFocus();
         });
     }
 
+    void initializeNewList(String vocabularyName) {
+        list = FXCollections.observableList(storage.read());
+        Collections.sort(list, (o1, o2) -> o1.getForeignWord().compareTo(o2.getForeignWord()));
+    }
+
+    void close(String vocabularyName) {
+        btnShowHide.setText("Hide");
+        storage.saveVocabulary(vocabularyName);
+    }
 }

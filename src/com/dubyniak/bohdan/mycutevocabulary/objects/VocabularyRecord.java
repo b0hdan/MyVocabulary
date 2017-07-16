@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class VocabularyRecord implements Serializable {
+    private static final long serialVersionUID = 1L;
     public static final int[] LEVELS_OF_POSTPONING = { 1, 3, 7, 14 , 30, 60 };
     private String foreignWord;
     private String definition;
@@ -65,6 +66,7 @@ public class VocabularyRecord implements Serializable {
     }
 
     public void postpone() {
+        System.out.println("showDate = " + showDate);
         showDate = new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * LEVELS_OF_POSTPONING[rememberingLevel]);
         if (rememberingLevel < LEVELS_OF_POSTPONING.length - 1)
             rememberingLevel++;

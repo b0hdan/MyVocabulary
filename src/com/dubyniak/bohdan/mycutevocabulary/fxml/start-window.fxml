@@ -15,7 +15,7 @@
            <BorderPane.margin>
                <Insets />
            </BorderPane.margin>
-           <Button mnemonicParsing="false" onAction="#myVocabularyButtonClicked" text="My vocabulary">
+           <Button mnemonicParsing="false" onAction="#directoriesButtonClicked" text="My vocabulary">
               <font>
                   <Font size="18.0" />
               </font>

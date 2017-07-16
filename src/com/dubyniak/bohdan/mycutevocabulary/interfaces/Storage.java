@@ -8,14 +8,27 @@ public interface Storage {
 
     void create(VocabularyRecord record);
 
+    void create(String directory);
+
     List<VocabularyRecord> read();
 
     void update(VocabularyRecord oldRecord, VocabularyRecord newRecord);
 
-    void delete(VocabularyRecord record);
+    void updateDirectory(String oldDirectory, String newDirectory);
 
-    void saveVocabulary();
+    void deleteDirectory(VocabularyRecord record);
+
+    void deleteDirectory(String directory);
+
+    void saveVocabulary(String vocabularyName);
 
     int sizeOfActive();
 
+    void loadVocabulary(String name);
+
+    void saveDirectories();
+
+    List<String> getDirectories();
+
+    String getLastVocabularyName();
 }

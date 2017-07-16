@@ -77,6 +77,7 @@ public class FlashcardsController {
                 int temp = random.nextInt(counterOfNewCards);
                 if (!numbersOfCards.contains(temp))
                     numbersOfCards.add(temp);
+                else i--;
             }
         for (Integer numbersOfCard : numbersOfCards) {
             counterOfNewCards = 0;
@@ -100,11 +101,13 @@ public class FlashcardsController {
     }
 
     public void positiveButtonPressed(ActionEvent actionEvent) {
+        System.out.println("FlashcardsController.positiveButtonPressed");
         flashcards.get(currentCard).postpone();
         flashcards.remove(currentCard);
         if (flashcards.size() != 0)
             showNextCard();
         else {
+            lblCount.setVisible(false);
             cardLabelsPane.setVisible(false);
             noCardsLabelPane.setVisible(true);
             answerButtonsPane.setVisible(false);
@@ -130,5 +133,9 @@ public class FlashcardsController {
         noCardsLabelPane.setVisible(false);
         answerButtonsPane.setVisible(false);
         checkButtonPane.setVisible(true);
+    }
+
+    void close(String vocabularyName) {
+        storage.saveVocabulary(vocabularyName);
     }
 }
