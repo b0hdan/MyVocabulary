@@ -127,8 +127,8 @@ public class VocabularyController {
         newWordDialog.initModality(Modality.APPLICATION_MODAL);
         newWordDialog.initOwner(owner);
         newWordDialog.setScene(new Scene(root, 272, 144));
-        txtEN = (TextField) newWordDialog.getScene().lookup("#txtEnglishWord");
-        txtUA = (TextField) newWordDialog.getScene().lookup("#txtUkrainianWord");
+        txtEN = (TextField) newWordDialog.getScene().lookup("#txtForeignWord");
+        txtUA = (TextField) newWordDialog.getScene().lookup("#txtDefinition");
         newWordDialog.setOnCloseRequest(event -> {
             txtEN.clear();
             txtUA.clear();

@@ -47,7 +47,7 @@ public class FileStorage implements Storage {
 
     @Override
     public void saveVocabulary() {
-        try (FileOutputStream fos = new FileOutputStream("vocabulary.txt");
+        try (FileOutputStream fos = new FileOutputStream("vocabulary.dat");
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(vocabulary);
             oos.flush();
@@ -58,7 +58,7 @@ public class FileStorage implements Storage {
 
     private List<VocabularyRecord> loadVocabulary() {
         List<VocabularyRecord> vocabulary = null;
-        try (FileInputStream fis = new FileInputStream("vocabulary.txt");
+        try (FileInputStream fis = new FileInputStream("vocabulary.dat");
              ObjectInputStream ois = new ObjectInputStream(fis)) {
             vocabulary = (List<VocabularyRecord>) ois.readObject();
         } catch (Exception ex) {

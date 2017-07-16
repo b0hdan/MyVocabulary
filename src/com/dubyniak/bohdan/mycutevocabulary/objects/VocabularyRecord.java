@@ -65,9 +65,7 @@ public class VocabularyRecord implements Serializable {
     }
 
     public void postpone() {
-        System.out.println(showDate);
         showDate = new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * LEVELS_OF_POSTPONING[rememberingLevel]);
-        System.out.println(foreignWord);
         if (rememberingLevel < LEVELS_OF_POSTPONING.length - 1)
             rememberingLevel++;
     }

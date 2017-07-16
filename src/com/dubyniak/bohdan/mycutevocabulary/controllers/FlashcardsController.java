@@ -19,6 +19,10 @@ public class FlashcardsController {
     private static Random random = new Random();
     private List<VocabularyRecord> flashcards = new ArrayList<>();
     private int currentCard;
+    private int realNumberOfCards;
+
+    @FXML
+    private Label lblCount;
 
     @FXML
     private Label lblQuestion;
@@ -46,7 +50,6 @@ public class FlashcardsController {
     }
 
     void start() {
-
         int counterOfNewCards = 0;
         List<Integer> numbersOfCards = new ArrayList<>();
 
@@ -59,6 +62,7 @@ public class FlashcardsController {
                 counterOfNewCards++;
 
         if (flashcards.size() == 0 && counterOfNewCards == 0) {
+            lblCount.setVisible(false);
             cardLabelsPane.setVisible(false);
             answerButtonsPane.setVisible(false);
             checkButtonPane.setVisible(false);
@@ -86,6 +90,7 @@ public class FlashcardsController {
                     }
         }
 
+        realNumberOfCards = flashcards.size();
         showNextCard();
     }
 
@@ -116,8 +121,10 @@ public class FlashcardsController {
 
     private void showNextCard() {
         lblQuestion.setText(flashcards.get(currentCard = random.nextInt(flashcards.size())).getForeignWord());
+        lblCount.setText(realNumberOfCards - flashcards.size() + "/" + realNumberOfCards);
         btnPositive.setText("I know this word\n(Show in " + flashcards.get(currentCard).getNumberOfPostponedDays() +
                 (flashcards.get(currentCard).getNumberOfPostponedDays() == 1 ? " day)" : "days)"));
+        lblCount.setVisible(true);
         lblAnswer.setVisible(false);
         cardLabelsPane.setVisible(true);
         noCardsLabelPane.setVisible(false);
