@@ -23,21 +23,22 @@ public class NewDirectoryDialogController {
             return;
         if (((Stage)((Node) actionEvent.getSource()).getScene().getWindow()).getTitle().equals("New directory")) {
             String temp = txtDirectoryName.getText();
-            for (String directory : storage.getDirectories()) {
+            for (String directory : storage.getVocabularies()) {
                 if (directory.equalsIgnoreCase(temp))
                     return;
             }
-            storage.create(temp);
+            storage.createVocabulary(temp);
         }
         else {
             ListView<String> lv =
                     (ListView<String>) StartController.allWordsDialogRoot.lookup("#lvAllDirectories");
-            for (String directory : storage.getDirectories())
+            for (String directory : storage.getVocabularies())
                 if (!directory.equals(lv.getSelectionModel().getSelectedItem()) &&
                         (directory.equalsIgnoreCase(txtDirectoryName.getText())))
                     return;
-            storage.updateDirectory(lv.getSelectionModel().getSelectedItem(), txtDirectoryName.getText());
+            storage.updateVocabulary(lv.getSelectionModel().getSelectedItem(), txtDirectoryName.getText());
         }
+        storage.saveVocabulary(txtDirectoryName.getText());
         ((Node) actionEvent.getSource()).getScene().getWindow().hide();
         clearDialogFields();
     }

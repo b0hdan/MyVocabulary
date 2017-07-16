@@ -15,7 +15,7 @@ public class DirectoryChooserController {
 
     @FXML
     private void initialize() {
-        choiceBox.setItems(FXCollections.observableList(storage.getDirectories()));
+        choiceBox.setItems(FXCollections.observableList(storage.getVocabularies()));
     }
 
     static void setStorage(Storage storage) {

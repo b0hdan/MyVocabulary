@@ -33,7 +33,7 @@ public class DirectoriesController {
 
     @FXML
     private void initialize() {
-        list = FXCollections.observableList(storage.getDirectories());
+        list = FXCollections.observableList(storage.getVocabularies());
         lvAllDirectories.setItems(list);
     }
 
@@ -50,7 +50,7 @@ public class DirectoriesController {
     }
 
     public void minusButtonClicked(ActionEvent actionEvent) {
-        storage.deleteDirectory(lvAllDirectories.getSelectionModel().getSelectedItem());
+        storage.deleteVocabulary(lvAllDirectories.getSelectionModel().getSelectedItem());
         refreshList();
     }
 
@@ -71,15 +71,16 @@ public class DirectoriesController {
             vocabularyDialog.setScene(new Scene(allWordsDialogRoot, 450, 400));
         }
         vocabularyController.initializeNewList(vocabularyName);
-        vocabularyDialog.setOnCloseRequest(event -> vocabularyController.close(vocabularyName));
         vocabularyController.refreshList();
         vocabularyController.lvAllWords.getSelectionModel().select(null);
-        vocabularyDialog.show();
+        vocabularyDialog.showAndWait();
+        vocabularyController.btnShowHide.setText("Hide");
+        storage.saveVocabulary(vocabularyName);
     }
 
     public void onKeyReleased(KeyEvent keyEvent) {
         if (keyEvent.getCode().equals(KeyCode.DELETE)) {
-            storage.deleteDirectory(lvAllDirectories.getSelectionModel().getSelectedItem());
+            storage.deleteVocabulary(lvAllDirectories.getSelectionModel().getSelectedItem());
             refreshList();
         }
     }
@@ -88,7 +89,7 @@ public class DirectoriesController {
         if (mouseEvent.getClickCount() == 2) {
             if (newDirectoryDialog == null)
                 initializeNewDirectoryDialog((Stage) ((Node) mouseEvent.getSource()).getScene().getWindow());
-            txtDirectoryName.setText(storage.getDirectories().get(lvAllDirectories.getSelectionModel().getSelectedIndex()));
+            txtDirectoryName.setText(storage.getVocabularies().get(lvAllDirectories.getSelectionModel().getSelectedIndex()));
             newDirectoryDialog.setTitle("Edit directory");
             txtDirectoryName.selectAll();
             newDirectoryDialog.showAndWait();
@@ -124,9 +125,5 @@ public class DirectoriesController {
             txtDirectoryName.clear();
             txtDirectoryName.requestFocus();
         });
-    }
-
-    void close() {
-        storage.saveDirectories();
     }
 }

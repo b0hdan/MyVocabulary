@@ -9,11 +9,11 @@ import java.util.List;
 
 public class FileStorage implements Storage {
     private List<VocabularyRecord> vocabulary;
-    private List<String> directories;
+    private List<String> vocabularies;
     private String lastVocabularyName;
 
     public FileStorage() {
-        directories = loadDirectories();
+        vocabularies = loadVocabularies();
     }
 
     @Override
@@ -22,8 +22,8 @@ public class FileStorage implements Storage {
     }
 
     @Override
-    public void create(String directory) {
-        directories.add(directory);
+    public void createVocabulary(String vocabulary) {
+        vocabularies.add(vocabulary);
     }
 
     @Override
@@ -37,18 +37,21 @@ public class FileStorage implements Storage {
     }
 
     @Override
-    public void updateDirectory(String oldDirectory, String newDirectory) {
-        directories.set(directories.indexOf(oldDirectory), newDirectory);
+    public void updateVocabulary(String oldVocabularyName, String newVocabularyName) {
+        vocabularies.set(vocabularies.indexOf(oldVocabularyName), newVocabularyName);
     }
 
     @Override
-    public void deleteDirectory(VocabularyRecord record) {
+    public void deleteVocabulary(VocabularyRecord record) {
         vocabulary.remove(record);
     }
 
     @Override
-    public void deleteDirectory(String directory) {
-        directories.remove(directory);
+    public void deleteVocabulary(String vocabularyName) {
+        if (vocabularyName != null) {
+            vocabularies.remove(vocabularyName);
+            if (!new File(vocabularyName += ".dat").delete()) System.out.println("Не вдалося видалити файл " + vocabularyName);;
+        }
     }
 
     @Override
@@ -85,31 +88,31 @@ public class FileStorage implements Storage {
     }
 
     @Override
-    public void saveDirectories() {
-        try (FileOutputStream fos = new FileOutputStream("directories.dat");
+    public void saveVocabularies() {
+        try (FileOutputStream fos = new FileOutputStream("vocabularies.dat");
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-            oos.writeObject(directories);
+            oos.writeObject(vocabularies);
             oos.flush();
         } catch (Exception ex) {
             System.out.println("Помилка при збереженні об'єкта!");
         }
     }
 
-    private List<String> loadDirectories() {
-        List<String> directories = new ArrayList<>();
-        if (new File("directories.dat").exists())
-            try (FileInputStream fis = new FileInputStream("directories.dat");
+    private List<String> loadVocabularies() {
+        List<String> vocabularies = new ArrayList<>();
+        if (new File("vocabularies.dat").exists())
+            try (FileInputStream fis = new FileInputStream("vocabularies.dat");
                  ObjectInputStream ois = new ObjectInputStream(fis)) {
-                directories = (List<String>) ois.readObject();
+                vocabularies = (List<String>) ois.readObject();
             } catch (Exception ex) {
                 System.out.println("Помилка при завантаженні об'єкта!");
             }
-        return directories;
+        return vocabularies;
     }
 
     @Override
-    public List<String> getDirectories() {
-        return directories;
+    public List<String> getVocabularies() {
+        return vocabularies;
     }
 
     @Override

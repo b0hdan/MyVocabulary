@@ -56,13 +56,13 @@ public class VocabularyController {
     }
 
     public void minusButtonClicked(ActionEvent actionEvent) {
-        storage.deleteDirectory(lvAllWords.getSelectionModel().getSelectedItem());
+        storage.deleteVocabulary(lvAllWords.getSelectionModel().getSelectedItem());
         refreshList();
     }
 
     public void onKeyReleased(KeyEvent keyEvent) {
         if (keyEvent.getCode().equals(KeyCode.DELETE)) {
-            storage.deleteDirectory(lvAllWords.getSelectionModel().getSelectedItem());
+            storage.deleteVocabulary(lvAllWords.getSelectionModel().getSelectedItem());
             refreshList();
         }
         else if (keyEvent.getCode().isArrowKey())
@@ -142,10 +142,5 @@ public class VocabularyController {
     void initializeNewList(String vocabularyName) {
         list = FXCollections.observableList(storage.read());
         Collections.sort(list, (o1, o2) -> o1.getForeignWord().compareTo(o2.getForeignWord()));
-    }
-
-    void close(String vocabularyName) {
-        btnShowHide.setText("Hide");
-        storage.saveVocabulary(vocabularyName);
     }
 }

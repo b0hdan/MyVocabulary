@@ -55,11 +55,11 @@ public class StartController {
             directoriesDialog.initModality(Modality.APPLICATION_MODAL);
             directoriesDialog.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
             directoriesDialog.setScene(new Scene(allWordsDialogRoot, 450, 400));
-            directoriesDialog.setOnCloseRequest(event -> directoriesController.close());
         }
         directoriesController.refreshList();
         directoriesController.lvAllDirectories.getSelectionModel().select(null);
-        directoriesDialog.show();
+        directoriesDialog.showAndWait();
+        storage.saveVocabularies();
     }
 
     public void flashcardsButtonClicked(ActionEvent actionEvent) throws IOException {

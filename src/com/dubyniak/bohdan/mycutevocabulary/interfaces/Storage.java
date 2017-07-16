@@ -8,17 +8,17 @@ public interface Storage {
 
     void create(VocabularyRecord record);
 
-    void create(String directory);
+    void createVocabulary(String vocabulary);
 
     List<VocabularyRecord> read();
 
     void update(VocabularyRecord oldRecord, VocabularyRecord newRecord);
 
-    void updateDirectory(String oldDirectory, String newDirectory);
+    void updateVocabulary(String oldVocabulary, String newVocabulary);
 
-    void deleteDirectory(VocabularyRecord record);
+    void deleteVocabulary(VocabularyRecord record);
 
-    void deleteDirectory(String directory);
+    void deleteVocabulary(String vocabulary);
 
     void saveVocabulary(String vocabularyName);
 
@@ -26,9 +26,9 @@ public interface Storage {
 
     void loadVocabulary(String name);
 
-    void saveDirectories();
+    void saveVocabularies();
 
-    List<String> getDirectories();
+    List<String> getVocabularies();
 
     String getLastVocabularyName();
 }
