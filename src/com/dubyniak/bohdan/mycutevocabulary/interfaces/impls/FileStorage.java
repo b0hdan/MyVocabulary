@@ -65,6 +65,8 @@ public class FileStorage implements Storage {
 
     @Override
     public void saveVocabulary(String vocabularyName) {
+        if (!new File(vocabularyName + ".dat").exists())
+            vocabulary = new ArrayList<>();
         try (FileOutputStream fos = new FileOutputStream(vocabularyName + ".dat");
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(vocabulary);
@@ -78,13 +80,14 @@ public class FileStorage implements Storage {
     public void loadVocabulary(String vocabularyName) {
         lastVocabularyName = vocabularyName;
         vocabulary = new ArrayList<>();
-        if (new File(vocabularyName + ".dat").exists())
+        if (new File(vocabularyName + ".dat").exists()) {
             try (FileInputStream fis = new FileInputStream(vocabularyName + ".dat");
                  ObjectInputStream ois = new ObjectInputStream(fis)) {
                 vocabulary = (List<VocabularyRecord>) ois.readObject();
             } catch (Exception ex) {
                 System.out.println("Помилка при завантаженні об'єкта!");
             }
+        }
     }
 
     @Override

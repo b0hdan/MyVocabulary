@@ -54,7 +54,6 @@ public class DirectoriesController {
     public void minusButtonClicked(ActionEvent actionEvent) {
         storage.deleteVocabulary(lvAllDirectories.getSelectionModel().getSelectedItem());
         refreshList();
-        System.out.println("hello");
     }
 
     public void openButtonClicked(ActionEvent actionEvent) throws IOException {

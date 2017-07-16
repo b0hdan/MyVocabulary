@@ -57,7 +57,6 @@ public class StartController {
             directoriesDialog.setScene(new Scene(allWordsDialogRoot, 450, 400));
         }
         directoriesController.refreshList();
-        directoriesController.lvAllDirectories.getSelectionModel().select(null);
         directoriesDialog.showAndWait();
         storage.saveVocabularies();
     }
@@ -74,7 +73,6 @@ public class StartController {
         }
         directoryChooserDialog.setOnCloseRequest(Event::consume);
         directoryChooserDialog.showAndWait();
-
 
         if (flashcardsDialog == null) {
             flashcardsDialog = new Stage();
