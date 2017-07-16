@@ -9,6 +9,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -19,6 +21,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Optional;
 
 public class DirectoriesController {
     private Stage newDirectoryDialog;
@@ -52,6 +55,9 @@ public class DirectoriesController {
     }
 
     public void minusButtonClicked(ActionEvent actionEvent) {
+        Optional<ButtonType> result = new Alert(Alert.AlertType.CONFIRMATION,
+                "Are you sure you want to delete this directory?", ButtonType.YES, ButtonType.NO).showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.NO) return;
         storage.deleteVocabulary(lvAllDirectories.getSelectionModel().getSelectedItem());
         refreshList();
     }
@@ -82,6 +88,9 @@ public class DirectoriesController {
 
     public void onKeyReleased(KeyEvent keyEvent) {
         if (keyEvent.getCode().equals(KeyCode.DELETE)) {
+            Optional<ButtonType> result = new Alert(Alert.AlertType.CONFIRMATION,
+                    "Are you sure you want to delete this directory?", ButtonType.YES, ButtonType.NO).showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.NO) return;
             storage.deleteVocabulary(lvAllDirectories.getSelectionModel().getSelectedItem());
             refreshList();
         }
