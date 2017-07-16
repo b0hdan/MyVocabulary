@@ -18,6 +18,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Collections;
 
 public class DirectoriesController {
     private Stage newDirectoryDialog;
@@ -35,6 +36,7 @@ public class DirectoriesController {
     private void initialize() {
         list = FXCollections.observableList(storage.getVocabularies());
         lvAllDirectories.setItems(list);
+        Collections.sort(list, String::compareTo);
     }
 
     static void setStorage(Storage storage) {
@@ -52,6 +54,7 @@ public class DirectoriesController {
     public void minusButtonClicked(ActionEvent actionEvent) {
         storage.deleteVocabulary(lvAllDirectories.getSelectionModel().getSelectedItem());
         refreshList();
+        System.out.println("hello");
     }
 
     public void openButtonClicked(ActionEvent actionEvent) throws IOException {
@@ -98,9 +101,11 @@ public class DirectoriesController {
     }
 
     void refreshList() {
+        Collections.sort(list, String::compareTo);
         if (lvAllDirectories.getSelectionModel().getSelectedItem() == null) {
             lvAllDirectories.setItems(null);
             lvAllDirectories.setItems(list);
+            lvAllDirectories.getSelectionModel().select(lvAllDirectories.getItems().size() - 1);
             return;
         }
         int selectedIndex = lvAllDirectories.getSelectionModel().getSelectedIndex();
