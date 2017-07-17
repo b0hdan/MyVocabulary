@@ -147,8 +147,4 @@ public class FlashcardsController {
         answerButtonsPane.setVisible(false);
         checkButtonPane.setVisible(true);
     }
-
-    void close(String vocabularyName) {
-        storage.saveVocabulary(vocabularyName);
-    }
 }

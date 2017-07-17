@@ -24,7 +24,7 @@ public class StartController {
     private Stage directoryChooserDialog;
     private Stage flashcardsDialog;
     private Stage testDialog;
-    static Parent allWordsDialogRoot;
+    static Parent directoriesDialogRoot;
     private Label lblQuestion;
     private Label lblCount;
     private ProgressBar pb;
@@ -48,13 +48,13 @@ public class StartController {
         if (directoriesDialog == null) {
             directoriesDialog = new Stage();
             FXMLLoader directoriesFXMLLoader = new FXMLLoader(getClass().getResource("../fxml/directories.fxml"));
-            allWordsDialogRoot = directoriesFXMLLoader.load();
+            directoriesDialogRoot = directoriesFXMLLoader.load();
             directoriesController = directoriesFXMLLoader.getController();
             directoriesDialog.setTitle("All directories");
             directoriesDialog.setResizable(false);
             directoriesDialog.initModality(Modality.APPLICATION_MODAL);
             directoriesDialog.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
-            directoriesDialog.setScene(new Scene(allWordsDialogRoot, 450, 400));
+            directoriesDialog.setScene(new Scene(directoriesDialogRoot));
         }
         directoriesController.refreshList();
         directoriesController.lvAllDirectories.getSelectionModel().clearSelection();
@@ -95,10 +95,10 @@ public class StartController {
             flashcardsDialog.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
             flashcardsDialog.setScene(new Scene((root)));
         }
-        flashcardsDialog.setOnCloseRequest(event -> flashcardsController.close(storage.getLastVocabularyName()));
         flashcardsController.btnPositive.requestFocus();
         flashcardsController.start();
-        flashcardsDialog.show();
+        flashcardsDialog.showAndWait();
+        flashcardsDialog.setOnCloseRequest(event -> storage.saveVocabulary(storage.getLastVocabularyName()));
     }
 
     public void testButtonClicked(ActionEvent actionEvent) throws IOException {

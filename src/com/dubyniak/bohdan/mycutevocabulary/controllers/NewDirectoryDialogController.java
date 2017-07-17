@@ -31,7 +31,7 @@ public class NewDirectoryDialogController {
         }
         else {
             ListView<String> lv =
-                    (ListView<String>) StartController.allWordsDialogRoot.lookup("#lvAllDirectories");
+                    (ListView<String>) StartController.directoriesDialogRoot.lookup("#lvAllDirectories");
             for (String directory : storage.getVocabularies())
                 if (!directory.equals(lv.getSelectionModel().getSelectedItem()) &&
                         (directory.equalsIgnoreCase(txtDirectoryName.getText())))

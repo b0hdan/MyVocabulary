@@ -76,7 +76,7 @@ public class DirectoriesController {
             vocabularyDialog.setResizable(false);
             vocabularyDialog.initModality(Modality.APPLICATION_MODAL);
             vocabularyDialog.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
-            vocabularyDialog.setScene(new Scene(allWordsDialogRoot, 450, 400));
+            vocabularyDialog.setScene(new Scene(allWordsDialogRoot));
         }
         vocabularyController.initializeNewList(vocabularyName);
         vocabularyController.refreshList();
@@ -97,15 +97,15 @@ public class DirectoriesController {
     }
 
     public void onMouseClicked(MouseEvent mouseEvent) throws IOException {
-        if (mouseEvent.getClickCount() == 2) {
-            if (newDirectoryDialog == null)
-                initializeNewDirectoryDialog((Stage) ((Node) mouseEvent.getSource()).getScene().getWindow());
-            txtDirectoryName.setText(storage.getVocabularies().get(lvAllDirectories.getSelectionModel().getSelectedIndex()));
-            newDirectoryDialog.setTitle("Edit directory");
-            txtDirectoryName.selectAll();
-            newDirectoryDialog.showAndWait();
-            refreshList();
-        }
+//        if (mouseEvent.getClickCount() == 2) {
+//            if (newDirectoryDialog == null)
+//                initializeNewDirectoryDialog((Stage) ((Node) mouseEvent.getSource()).getScene().getWindow());
+//            txtDirectoryName.setText(storage.getVocabularies().get(lvAllDirectories.getSelectionModel().getSelectedIndex()));
+//            newDirectoryDialog.setTitle("Edit directory");
+//            txtDirectoryName.selectAll();
+//            newDirectoryDialog.showAndWait();
+//            refreshList();
+//        }
     }
 
     void refreshList() {
