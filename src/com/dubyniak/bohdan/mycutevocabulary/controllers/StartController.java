@@ -72,8 +72,11 @@ public class StartController {
             directoryChooserDialog.initModality(Modality.APPLICATION_MODAL);
             directoryChooserDialog.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
             directoryChooserDialog.setScene(new Scene(root));
+            directoryChooserDialog.setOnCloseRequest(event -> {
+                directoryChooserController.setCloseButtonPressed(true);
+                directoryChooserController.choiceBox.getSelectionModel().select(null);
+            });
         }
-        directoryChooserDialog.setOnCloseRequest(event -> directoryChooserController.setCloseButtonPressed(true));
         directoryChooserDialog.showAndWait();
         if (directoryChooserController.isCloseButtonPressed()) {
             directoryChooserController.setCloseButtonPressed(false);
@@ -101,8 +104,7 @@ public class StartController {
         if (storage.read().size() == 0) {
             new Alert(Alert.AlertType.ERROR, "Cannot start the test! Storage is empty.", ButtonType.OK).show();
             return;
-        }
-        else if (testDialog == null) {
+        } else if (testDialog == null) {
             testDialog = new Stage();
             Parent root = FXMLLoader.load(getClass().getResource("../fxml/test.fxml"));
             testDialog.setTitle("Test");

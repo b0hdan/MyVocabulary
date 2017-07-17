@@ -11,16 +11,16 @@ public class DirectoryChooserController {
     private static Storage storage;
     private boolean closeButtonPressed;
 
-    public boolean isCloseButtonPressed() {
+    boolean isCloseButtonPressed() {
         return closeButtonPressed;
     }
 
-    public void setCloseButtonPressed(boolean closeButtonPressed) {
+    void setCloseButtonPressed(boolean closeButtonPressed) {
         this.closeButtonPressed = closeButtonPressed;
     }
 
     @FXML
-    private ChoiceBox<String> choiceBox;
+    ChoiceBox<String> choiceBox;
 
     @FXML
     private void initialize() {
