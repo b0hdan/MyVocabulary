@@ -5,7 +5,6 @@ import com.dubyniak.bohdan.mycutevocabulary.interfaces.impls.FileStorage;
 import com.dubyniak.bohdan.mycutevocabulary.objects.TestMaker;
 import com.dubyniak.bohdan.mycutevocabulary.objects.VocabularyRecord;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -30,6 +29,7 @@ public class StartController {
     private Label lblCount;
     private ProgressBar pb;
     private DirectoriesController directoriesController;
+    private DirectoryChooserController directoryChooserController;
     private FlashcardsController flashcardsController;
 
     public StartController() {
@@ -64,15 +64,21 @@ public class StartController {
     public void flashcardsButtonClicked(ActionEvent actionEvent) throws IOException {
         if (directoryChooserDialog == null) {
             directoryChooserDialog = new Stage();
-            Parent root = FXMLLoader.load(getClass().getResource("../fxml/directory-chooser.fxml"));
+            FXMLLoader directoryChooserFXMLLoader = new FXMLLoader(getClass().getResource("../fxml/directory-chooser.fxml"));
+            Parent root = directoryChooserFXMLLoader.load();
+            directoryChooserController = directoryChooserFXMLLoader.getController();
             directoryChooserDialog.setTitle("Choose a directory");
             directoryChooserDialog.setResizable(false);
             directoryChooserDialog.initModality(Modality.APPLICATION_MODAL);
             directoryChooserDialog.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
             directoryChooserDialog.setScene(new Scene(root));
         }
-        directoryChooserDialog.setOnCloseRequest(Event::consume);
+        directoryChooserDialog.setOnCloseRequest(event -> directoryChooserController.setCloseButtonPressed(true));
         directoryChooserDialog.showAndWait();
+        if (directoryChooserController.isCloseButtonPressed()) {
+            directoryChooserController.setCloseButtonPressed(false);
+            return;
+        }
 
         if (flashcardsDialog == null) {
             flashcardsDialog = new Stage();

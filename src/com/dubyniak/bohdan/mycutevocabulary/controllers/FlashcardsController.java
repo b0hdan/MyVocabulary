@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class FlashcardsController {
-    private static int numberOfNewCardsToUse = 30;
+    private static int numberOfNewCardsToUse = 15;
     private static Storage storage;
     private static Random random = new Random();
     private List<VocabularyRecord> flashcards = new ArrayList<>();

@@ -9,6 +9,15 @@ import javafx.scene.control.ChoiceBox;
 
 public class DirectoryChooserController {
     private static Storage storage;
+    private boolean closeButtonPressed;
+
+    public boolean isCloseButtonPressed() {
+        return closeButtonPressed;
+    }
+
+    public void setCloseButtonPressed(boolean closeButtonPressed) {
+        this.closeButtonPressed = closeButtonPressed;
+    }
 
     @FXML
     private ChoiceBox<String> choiceBox;
