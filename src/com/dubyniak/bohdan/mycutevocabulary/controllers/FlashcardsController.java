@@ -97,12 +97,19 @@ public class FlashcardsController {
 
     public void negativeButtonClicked(ActionEvent actionEvent) {
         flashcards.get(currentCard).resetShowDateAndRememberingLevel();
+        if (flashcards.get(currentCard).isReversed())
+            flashcards.get(currentCard).setReversed(false);
         showNextCard();
     }
 
     public void positiveButtonPressed(ActionEvent actionEvent) {
-        flashcards.get(currentCard).postpone();
-        flashcards.remove(currentCard);
+        if (flashcards.get(currentCard).isReversed()) {
+            flashcards.get(currentCard).setReversed(false);
+            flashcards.get(currentCard).postpone();
+            flashcards.remove(currentCard);
+        } else
+            flashcards.get(currentCard).setReversed(true);
+
         if (flashcards.size() != 0)
             showNextCard();
         else {
@@ -114,7 +121,10 @@ public class FlashcardsController {
     }
 
     public void checkButtonClicked(ActionEvent actionEvent) {
-        lblAnswer.setText(flashcards.get(currentCard).getDefinition());
+        if (flashcards.get(currentCard).isReversed())
+            lblAnswer.setText(flashcards.get(currentCard).getForeignWord());
+        else
+            lblAnswer.setText(flashcards.get(currentCard).getDefinition());
         lblAnswer.setVisible(true);
         checkButtonPane.setVisible(false);
         answerButtonsPane.setVisible(true);
@@ -122,7 +132,11 @@ public class FlashcardsController {
     }
 
     private void showNextCard() {
-        lblQuestion.setText(flashcards.get(currentCard = random.nextInt(flashcards.size())).getForeignWord());
+        currentCard = random.nextInt(flashcards.size());
+        if (flashcards.get(currentCard).isReversed())
+            lblQuestion.setText(flashcards.get(currentCard).getDefinition());
+        else
+            lblQuestion.setText(flashcards.get(currentCard).getForeignWord());
         lblCount.setText(realNumberOfCards - flashcards.size() + "/" + realNumberOfCards);
         btnPositive.setText("I know this word\n(Show in " + flashcards.get(currentCard).getNumberOfPostponedDays() +
                 (flashcards.get(currentCard).getNumberOfPostponedDays() == 1 ? " day)" : "days)"));

@@ -12,6 +12,7 @@ public class VocabularyRecord implements Serializable {
     private boolean isShown = true;
     private Date showDate;
     private int rememberingLevel;
+    private boolean reversed;
 
     public VocabularyRecord(String foreignWord, String definition) {
         this.foreignWord = foreignWord;
@@ -73,6 +74,14 @@ public class VocabularyRecord implements Serializable {
 
     public int getNumberOfPostponedDays() {
         return LEVELS_OF_POSTPONING[rememberingLevel];
+    }
+
+    public boolean isReversed() {
+        return reversed;
+    }
+
+    public void setReversed(boolean reversed) {
+        this.reversed = reversed;
     }
 
     @Override

@@ -57,6 +57,7 @@ public class StartController {
             directoriesDialog.setScene(new Scene(allWordsDialogRoot, 450, 400));
         }
         directoriesController.refreshList();
+        directoriesController.lvAllDirectories.getSelectionModel().clearSelection();
         directoriesDialog.showAndWait();
         storage.saveVocabularies();
     }
