@@ -4,14 +4,16 @@ public class StatisticRecord {
     private String directory;
     private Integer numberOfNewWords;
     private Integer numberOfNeedRepeatingWords;
+    private Integer numberOfAllWords;
 
     public StatisticRecord() {
     }
 
-    public StatisticRecord(String directory, Integer numberOfNewWords, Integer numberOfNeedRepeatingWords) {
+    public StatisticRecord(String directory, Integer numberOfNewWords, Integer numberOfNeedRepeatingWords, Integer numberOfAllWords) {
         this.directory = directory;
         this.numberOfNewWords = numberOfNewWords;
         this.numberOfNeedRepeatingWords = numberOfNeedRepeatingWords;
+        this.numberOfAllWords = numberOfAllWords;
     }
 
     public String getDirectory() {
@@ -36,5 +38,13 @@ public class StatisticRecord {
 
     public void setNumberOfNeedRepeatingWords(Integer numberOfNeedRepeatingWords) {
         this.numberOfNeedRepeatingWords = numberOfNeedRepeatingWords;
+    }
+
+    public Integer getNumberOfAllWords() {
+        return numberOfAllWords;
+    }
+
+    public void setNumberOfAllWords(Integer numberOfAllWords) {
+        this.numberOfAllWords = numberOfAllWords;
     }
 }

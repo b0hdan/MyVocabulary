@@ -158,6 +158,7 @@ public class StartController {
             statisticDialog.setScene(new Scene((root)));
         }
         statisticController.fillList();
+        statisticController.tableView.getSelectionModel().clearSelection();
         statisticDialog.showAndWait();
     }
 }
