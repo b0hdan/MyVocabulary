@@ -1,0 +1,19 @@
+// alphabet sorting
+// directories
+// object versions... how to be?
+// allow safe directory chooser closing
+
+swaping foreign word and definition!
+opportunity to choose everything in flashcards: postponing periods, number of new cards etc
+faster of all limit number of questions in test
+hot keys
+favourites
+search
+add words info somehow, for example showData and remembering level or something like that
+
+0) Show when old words, are available
+(show number of all types of words)
+1) directory chooser for test and backup!
+2) backup!
+3) do not reset word's remembering level and other data when updating!
+4) FORBID RENAMING DIRECTORIES!
