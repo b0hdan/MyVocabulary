@@ -16,3 +16,4 @@ add words info somehow, for example showData and remembering level or something 
 2) backup!
 3) do not reset word's remembering level and other data when updating!
 4) FORBID RENAMING DIRECTORIES!
+5) make repeated cards in other section (maybe)...
