@@ -139,7 +139,7 @@ public class FlashcardsController {
             lblQuestion.setText(flashcards.get(currentCard).getForeignWord());
         lblCount.setText(realNumberOfCards - flashcards.size() + "/" + realNumberOfCards);
         btnPositive.setText("I know this word\n(Show in " + flashcards.get(currentCard).getNumberOfPostponedDays() +
-                (flashcards.get(currentCard).getNumberOfPostponedDays() == 1 ? " day)" : "days)"));
+                (flashcards.get(currentCard).getNumberOfPostponedDays() == 1 ? " day)" : " days)"));
         lblCount.setVisible(true);
         lblAnswer.setVisible(false);
         cardLabelsPane.setVisible(true);

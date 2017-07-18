@@ -101,7 +101,7 @@ public class StartController {
         flashcardsController.btnPositive.requestFocus();
         flashcardsController.start();
         flashcardsDialog.showAndWait();
-        flashcardsDialog.setOnCloseRequest(event -> storage.saveVocabulary(storage.getLastVocabularyName()));
+        storage.saveVocabulary(storage.getLastVocabularyName());
     }
 
     public void testButtonClicked(ActionEvent actionEvent) throws IOException {
