@@ -97,7 +97,7 @@ public class DirectoriesController {
     }
 
     public void onMouseClicked(MouseEvent mouseEvent) throws IOException {
-//        if (mouseEvent.getClickCount() == 2) {
+        if (mouseEvent.getClickCount() == 2) {
 //            if (newDirectoryDialog == null)
 //                initializeNewDirectoryDialog((Stage) ((Node) mouseEvent.getSource()).getScene().getWindow());
 //            txtDirectoryName.setText(storage.getVocabularies().get(lvAllDirectories.getSelectionModel().getSelectedIndex()));
@@ -105,7 +105,28 @@ public class DirectoriesController {
 //            txtDirectoryName.selectAll();
 //            newDirectoryDialog.showAndWait();
 //            refreshList();
-//        }
+        if (lvAllDirectories.getSelectionModel().getSelectedItem() == null)
+            return;
+        String vocabularyName = lvAllDirectories.getSelectionModel().getSelectedItem();
+        storage.loadVocabulary(vocabularyName);
+        if (vocabularyDialog == null) {
+            vocabularyDialog = new Stage();
+            FXMLLoader vocabularyFXMLLoader = new FXMLLoader(getClass().getResource("../fxml/my-vocabulary.fxml"));
+            allWordsDialogRoot = vocabularyFXMLLoader.load();
+            vocabularyController = vocabularyFXMLLoader.getController();
+            vocabularyDialog.setTitle("All words");
+            vocabularyDialog.setResizable(false);
+            vocabularyDialog.initModality(Modality.APPLICATION_MODAL);
+            vocabularyDialog.initOwner(((Node) mouseEvent.getSource()).getScene().getWindow());
+            vocabularyDialog.setScene(new Scene(allWordsDialogRoot));
+        }
+        vocabularyController.initializeNewList(vocabularyName);
+        vocabularyController.refreshList();
+        vocabularyController.lvAllWords.getSelectionModel().select(null);
+        vocabularyDialog.showAndWait();
+        vocabularyController.btnShowHide.setText("Hide");
+        storage.saveVocabulary(vocabularyName);
+        }
     }
 
     void refreshList() {
