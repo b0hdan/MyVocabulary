@@ -39,6 +39,14 @@
                   <Cursor fx:constant="HAND" />
               </cursor>
            </Button>
+         <Button mnemonicParsing="false" onAction="#statisticButtonClicked" text="Statistic">
+            <font>
+               <Font size="18.0" />
+            </font>
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
+         </Button>
        </VBox>
    </center>
    <bottom>

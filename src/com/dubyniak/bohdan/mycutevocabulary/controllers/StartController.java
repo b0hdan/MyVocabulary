@@ -23,6 +23,7 @@ public class StartController {
     private Stage directoriesDialog;
     private Stage directoryChooserDialog;
     private Stage flashcardsDialog;
+    private Stage statisticDialog;
     private Stage testDialog;
     static Parent directoriesDialogRoot;
     private Label lblQuestion;
@@ -31,6 +32,7 @@ public class StartController {
     private DirectoriesController directoriesController;
     private DirectoryChooserController directoryChooserController;
     private FlashcardsController flashcardsController;
+    private StatisticController statisticController;
 
     public StartController() {
         storage = new FileStorage();
@@ -41,6 +43,7 @@ public class StartController {
         DirectoryChooserController.setStorage(storage);
         FlashcardsController.setStorage(storage);
         TestMaker.setStorage(storage);
+        StatisticController.setStorage(storage);
 //        fillTestData();
     }
 
@@ -140,5 +143,21 @@ public class StartController {
         storage.create(new VocabularyRecord("to work", "працювати"));
         storage.create(new VocabularyRecord("a pen", "ручка"));
         storage.create(new VocabularyRecord("a pencil", "олівець"));
+    }
+
+    public void statisticButtonClicked(ActionEvent actionEvent) throws IOException {
+        if (statisticDialog == null) {
+            statisticDialog = new Stage();
+            FXMLLoader statisticFXMLLoader = new FXMLLoader(getClass().getResource("../fxml/statistic.fxml"));
+            Parent root = statisticFXMLLoader.load();
+            statisticController = statisticFXMLLoader.getController();
+            statisticDialog.setTitle("Statistic");
+            statisticDialog.setResizable(false);
+            statisticDialog.initModality(Modality.APPLICATION_MODAL);
+            statisticDialog.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
+            statisticDialog.setScene(new Scene((root)));
+        }
+        statisticController.fillList();
+        statisticDialog.showAndWait();
     }
 }
