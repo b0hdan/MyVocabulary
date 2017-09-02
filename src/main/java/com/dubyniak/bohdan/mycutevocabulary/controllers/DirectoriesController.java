@@ -69,7 +69,7 @@ public class DirectoriesController {
         storage.loadVocabulary(vocabularyName);
         if (vocabularyDialog == null) {
             vocabularyDialog = new Stage();
-            FXMLLoader vocabularyFXMLLoader = new FXMLLoader(getClass().getResource("../fxml/my-vocabulary.fxml"));
+            FXMLLoader vocabularyFXMLLoader = new FXMLLoader(getClass().getResource("/my-vocabulary.fxml"));
             allWordsDialogRoot = vocabularyFXMLLoader.load();
             vocabularyController = vocabularyFXMLLoader.getController();
             vocabularyDialog.setTitle("All words");
@@ -111,7 +111,7 @@ public class DirectoriesController {
         storage.loadVocabulary(vocabularyName);
         if (vocabularyDialog == null) {
             vocabularyDialog = new Stage();
-            FXMLLoader vocabularyFXMLLoader = new FXMLLoader(getClass().getResource("../fxml/my-vocabulary.fxml"));
+            FXMLLoader vocabularyFXMLLoader = new FXMLLoader(getClass().getResource("/my-vocabulary.fxml"));
             allWordsDialogRoot = vocabularyFXMLLoader.load();
             vocabularyController = vocabularyFXMLLoader.getController();
             vocabularyDialog.setTitle("All words");
@@ -149,7 +149,7 @@ public class DirectoriesController {
 
     private void initializeNewDirectoryDialog(Stage owner) throws IOException {
         newDirectoryDialog = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("../fxml/new-directory-dialog.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/new-directory-dialog.fxml"));
         newDirectoryDialog.setResizable(false);
         newDirectoryDialog.initModality(Modality.APPLICATION_MODAL);
         newDirectoryDialog.initOwner(owner);

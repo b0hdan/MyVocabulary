@@ -128,7 +128,7 @@ public class VocabularyController {
 
     private void initializeNewWordDialog(Stage owner) throws IOException {
         newWordDialog = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("../fxml/new-word-dialog.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/new-word-dialog.fxml"));
         newWordDialog.setResizable(false);
         newWordDialog.initModality(Modality.APPLICATION_MODAL);
         newWordDialog.initOwner(owner);
