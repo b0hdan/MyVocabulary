@@ -14,6 +14,11 @@ public class VocabularyRecord implements Serializable {
     private int rememberingLevel;
     private boolean reversed;
 
+
+    public VocabularyRecord() {
+
+    }
+
     public VocabularyRecord(String foreignWord, String definition) {
         this.foreignWord = foreignWord;
         this.definition = definition;
