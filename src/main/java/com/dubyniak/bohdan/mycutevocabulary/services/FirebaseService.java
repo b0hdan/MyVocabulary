@@ -35,7 +35,7 @@ public class FirebaseService implements Storage {
                 vocabularies.clear();
                 for (DataSnapshot child : dataSnapshot.getChildren())
                     vocabularies.add(child.getKey());
-                userReference.child(currentUser).removeEventListener(this);
+                userReference.removeEventListener(this);
             }
 
             @Override
@@ -106,7 +106,6 @@ public class FirebaseService implements Storage {
         });
 
     }
-
 
     @Override
     public void delete(VocabularyRecord record) {
