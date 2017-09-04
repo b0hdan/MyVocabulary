@@ -1,7 +1,5 @@
 package com.dubyniak.bohdan.mycutevocabulary.start;
 
-import com.dubyniak.bohdan.mycutevocabulary.objects.VocabularyRecord;
-import com.dubyniak.bohdan.mycutevocabulary.services.FirebaseService;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -21,17 +19,6 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
-        FirebaseService fbService = new FirebaseService();
-        fbService.loadVocabulary("en");
-        fbService.create(new VocabularyRecord("tt", "ggggg"));
-        fbService.loadVocabulary("fr");
-        VocabularyRecord aaa = new VocabularyRecord("aaa", "bbbbbb", false);
-        fbService.create(aaa);
-        System.out.println("count = " + fbService.sizeOfActive());
-        fbService.deleteVocabulary("en");
-        VocabularyRecord bbb = new VocabularyRecord("ccc", "dddd", false);
-        fbService.update(aaa,bbb);
-        fbService.updateVocabulary("fr","uk");
         launch(args);
     }
 }

@@ -1,9 +1,9 @@
 package com.dubyniak.bohdan.mycutevocabulary.controllers;
 
 import com.dubyniak.bohdan.mycutevocabulary.interfaces.Storage;
-import com.dubyniak.bohdan.mycutevocabulary.interfaces.impls.FileStorage;
 import com.dubyniak.bohdan.mycutevocabulary.objects.TestMaker;
 import com.dubyniak.bohdan.mycutevocabulary.objects.VocabularyRecord;
+import com.dubyniak.bohdan.mycutevocabulary.services.FirebaseService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -35,7 +35,7 @@ public class StartController {
     private StatisticController statisticController;
 
     public StartController() {
-        storage = new FileStorage();
+        storage = new FirebaseService();
         DirectoriesController.setStorage(storage);
         NewDirectoryDialogController.setStorage(storage);
         VocabularyController.setStorage(storage);

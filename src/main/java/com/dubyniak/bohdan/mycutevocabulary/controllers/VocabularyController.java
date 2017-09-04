@@ -55,13 +55,13 @@ public class VocabularyController {
     }
 
     public void minusButtonClicked(ActionEvent actionEvent) {
-        storage.deleteVocabulary(lvAllWords.getSelectionModel().getSelectedItem());
+        storage.delete(lvAllWords.getSelectionModel().getSelectedItem());
         refreshList();
     }
 
     public void onKeyReleased(KeyEvent keyEvent) {
         if (keyEvent.getCode().equals(KeyCode.DELETE)) {
-            storage.deleteVocabulary(lvAllWords.getSelectionModel().getSelectedItem());
+            storage.delete(lvAllWords.getSelectionModel().getSelectedItem());
             refreshList();
         }
         else if (keyEvent.getCode().isArrowKey())

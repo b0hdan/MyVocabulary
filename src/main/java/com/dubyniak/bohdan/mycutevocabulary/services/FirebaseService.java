@@ -11,142 +11,97 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-/**
- * Created by sdub on 03.09.2017.
- */
 public class FirebaseService implements Storage {
-    DatabaseReference ref;
-    DatabaseReference usersRef;
-    DatabaseReference vocabRef;
-    List<VocabularyRecord> currentVocabulary = new ArrayList<>();
-    List<String> vocabularyList = new ArrayList<>();
-    String lastVocabularyName = "";
-    String currentUser = " someone";
+    private DatabaseReference dbReference;
+    private DatabaseReference userReference;
+    private DatabaseReference vocabularyReference;
+    private List<VocabularyRecord> vocabulary = new ArrayList<>();
+    private List<String> vocabularies = new ArrayList<>();
+    private String lastVocabularyName;
+    private String currentUser = "someone";
 
     public FirebaseService() {
+        connectToDatabase();
+
+        dbReference = FirebaseDatabase
+                .getInstance()
+                .getReference("vocabulary/users");
+        userReference = dbReference.child(currentUser);
+        userReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                vocabularies.clear();
+                for (DataSnapshot child : dataSnapshot.getChildren())
+                    vocabularies.add(child.getKey());
+                userReference.child(currentUser).removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
+    private void connectToDatabase() {
         FileInputStream serviceAccount = null;
         try {
-            serviceAccount = new FileInputStream
-                    ("U:/Java_Project_Folder_U_examles/BohdanVocabulary/vocabulary-trainer-77832-firebase-adminsdk-1cwf0-5825b5f577.json");
+            serviceAccount = new FileInputStream("mycutevocabulary-firebase-adminsdk-pnrc5-c1871563cc.json");
         } catch (FileNotFoundException e) {
-            System.out.println("ERROR: invalid service account credentials. See README.");
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         FirebaseOptions options = null;
         try {
             options = new FirebaseOptions.Builder()
                     .setCredential(FirebaseCredentials.fromCertificate(serviceAccount))
-                    .setDatabaseUrl("https://vocabulary-trainer-77832.firebaseio.com/")
+                    .setDatabaseUrl("https://mycutevocabulary.firebaseio.com/")
                     .build();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         FirebaseApp.initializeApp(options);
-
-        ref = FirebaseDatabase
-                .getInstance()
-                .getReference("vocab/users");
-        usersRef = ref.child(currentUser);
-        usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                vocabularyList = new ArrayList<>();
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    String vocabularyName = child.getValue(String.class);
-                    vocabularyList.add(vocabularyName);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-/*
-        usersRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                VocabularyRecord vr = dataSnapshot.getValue(VocabularyRecord.class);
-//                VocabularyRecord newPost = dataSnapshot.getValue(VocabularyRecord.class);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Map<String, VocabularyRecord> map = dataSnapshot.getValue(Map.class);
-//                VocabularyRecord newPost = dataSnapshot.getValue(VocabularyRecord.class);
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Map<String, VocabularyRecord> map = dataSnapshot.getValue(Map.class);
-//                VocabularyRecord newPost = dataSnapshot.getValue(VocabularyRecord.class);
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                Map<String, VocabularyRecord> map = dataSnapshot.getValue(Map.class);
-//                VocabularyRecord newPost = dataSnapshot.getValue(VocabularyRecord.class);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-//        usersRef.getDatabase()
-//        currentVocabulary.add(new VocabularyRecord("apple", "яблуко"));
-//        currentVocabulary.add(new VocabularyRecord("table", "стіл"));
-//        currentVocabulary.add(new VocabularyRecord("car", "авто"));
-//
-//        usersRef.setValue(currentVocabulary);
-
-        });*/
     }
-
 
     @Override
     public void create(VocabularyRecord record) {
-        currentVocabulary.add(record);
-        DatabaseReference dr = vocabRef.child(record.getForeignWord());
-//        currentVocabulary.add(new VocabularyRecord("cccc", "dddd"));
-        dr.setValue(record);
+        vocabularyReference.child(record.getForeignWord()).setValue(record);
+        vocabulary.add(record);
     }
 
     @Override
-    public void createVocabulary(String vocabulary) {
-        DatabaseReference dr = usersRef.push();
-//        dr.setValue(vocabulary);
+    public void create(String vocabulary) {
+        userReference.child(vocabulary).setValue(0);
+        vocabularies.add(vocabulary);
     }
 
     @Override
     public List<VocabularyRecord> read() {
-        return currentVocabulary;
+        return vocabulary;
     }
 
     @Override
     public void update(VocabularyRecord oldRecord, VocabularyRecord newRecord) {
-        vocabRef.child(oldRecord.getForeignWord()).setValue(null);
-        vocabRef.child(newRecord.getForeignWord()).setValue(newRecord);
+        vocabularyReference.child(oldRecord.getForeignWord()).setValue(null);
+        vocabularyReference.child(newRecord.getForeignWord()).setValue(newRecord);
+        vocabulary.set(vocabulary.indexOf(oldRecord), newRecord);
     }
 
     @Override
-    public void updateVocabulary(String oldVocabulary, String newVocabulary) {
-
-        usersRef.child(oldVocabulary).addListenerForSingleValueEvent(new ValueEventListener() {
+    public void update(String oldVocabulary, String newVocabulary) {
+        userReference.child(oldVocabulary).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                usersRef.child(newVocabulary).setValue(dataSnapshot.getValue());
-                usersRef.child(oldVocabulary).setValue(null);
-                usersRef.child(oldVocabulary).removeEventListener(this);
+                userReference.child(newVocabulary).setValue(dataSnapshot.getValue());
+                userReference.child(oldVocabulary).setValue(null);
+                vocabularies.set(vocabularies.indexOf(oldVocabulary), newVocabulary);
+                userReference.child(oldVocabulary).removeEventListener(this);
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
 
@@ -154,43 +109,41 @@ public class FirebaseService implements Storage {
 
 
     @Override
-    public void deleteVocabulary(VocabularyRecord record) {
-        vocabRef.child(record.getForeignWord()).setValue(null);
+    public void delete(VocabularyRecord record) {
+        vocabularyReference.child(record.getForeignWord()).setValue(null);
+        vocabulary.remove(record);
     }
 
     @Override
-    public void deleteVocabulary(String vocabulary) {
-        usersRef.child(vocabulary).setValue(null);
+    public void delete(String vocabulary) {
+        userReference.child(vocabulary).setValue(null);
+        vocabularies.remove(vocabulary);
     }
 
     @Override
     public void saveVocabulary(String vocabularyName) {
-// do nothing
     }
 
     @Override
-    public int sizeOfActive() {
-        long s = currentVocabulary.stream().filter(VocabularyRecord::isShown).count();
-        return (int) s;
+    public int sizeOfShownRecords() {
+        return (int) vocabulary.stream().filter(VocabularyRecord::isShown).count();
     }
 
     @Override
-    public void loadVocabulary(String name) {
-        vocabRef = usersRef.child(name);
-        lastVocabularyName = name;
-        vocabRef.addListenerForSingleValueEvent(new ValueEventListener() {
+    public void loadVocabulary(String vocabularyName) {
+        lastVocabularyName = vocabularyName;
+        vocabularyReference = userReference.child(vocabularyName);
+        vocabularyReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                currentVocabulary = new ArrayList<>();
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    VocabularyRecord vocabularyRec = child.getValue(VocabularyRecord.class);
-                    currentVocabulary.add(vocabularyRec);
-                }
+                vocabulary.clear();
+                for (DataSnapshot child : dataSnapshot.getChildren())
+                    vocabulary.add(child.getValue(VocabularyRecord.class));
+                vocabularyReference.removeEventListener(this);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
     }
@@ -202,7 +155,7 @@ public class FirebaseService implements Storage {
 
     @Override
     public List<String> getVocabularies() {
-        return vocabularyList;
+        return vocabularies;
     }
 
     @Override

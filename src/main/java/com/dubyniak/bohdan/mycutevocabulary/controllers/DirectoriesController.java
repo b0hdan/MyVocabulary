@@ -55,10 +55,12 @@ public class DirectoriesController {
     }
 
     public void minusButtonClicked(ActionEvent actionEvent) {
+        if (lvAllDirectories.getSelectionModel().getSelectedItem() == null)
+            return;
         Optional<ButtonType> result = new Alert(Alert.AlertType.CONFIRMATION,
                 "Are you sure you want to delete this directory?", ButtonType.YES, ButtonType.NO).showAndWait();
         if (result.isPresent() && result.get() == ButtonType.NO) return;
-        storage.deleteVocabulary(lvAllDirectories.getSelectionModel().getSelectedItem());
+        storage.delete(lvAllDirectories.getSelectionModel().getSelectedItem());
         refreshList();
     }
 
@@ -91,41 +93,22 @@ public class DirectoriesController {
             Optional<ButtonType> result = new Alert(Alert.AlertType.CONFIRMATION,
                     "Are you sure you want to delete this directory?", ButtonType.YES, ButtonType.NO).showAndWait();
             if (result.isPresent() && result.get() == ButtonType.NO) return;
-            storage.deleteVocabulary(lvAllDirectories.getSelectionModel().getSelectedItem());
+            storage.delete(lvAllDirectories.getSelectionModel().getSelectedItem());
             refreshList();
         }
     }
 
     public void onMouseClicked(MouseEvent mouseEvent) throws IOException {
-        if (mouseEvent.getClickCount() == 2) {
-//            if (newDirectoryDialog == null)
-//                initializeNewDirectoryDialog((Stage) ((Node) mouseEvent.getSource()).getScene().getWindow());
-//            txtDirectoryName.setText(storage.getVocabularies().get(lvAllDirectories.getSelectionModel().getSelectedIndex()));
-//            newDirectoryDialog.setTitle("Edit directory");
-//            txtDirectoryName.selectAll();
-//            newDirectoryDialog.showAndWait();
-//            refreshList();
         if (lvAllDirectories.getSelectionModel().getSelectedItem() == null)
             return;
-        String vocabularyName = lvAllDirectories.getSelectionModel().getSelectedItem();
-        storage.loadVocabulary(vocabularyName);
-        if (vocabularyDialog == null) {
-            vocabularyDialog = new Stage();
-            FXMLLoader vocabularyFXMLLoader = new FXMLLoader(getClass().getResource("/my-vocabulary.fxml"));
-            allWordsDialogRoot = vocabularyFXMLLoader.load();
-            vocabularyController = vocabularyFXMLLoader.getController();
-            vocabularyDialog.setTitle("All words");
-            vocabularyDialog.setResizable(false);
-            vocabularyDialog.initModality(Modality.APPLICATION_MODAL);
-            vocabularyDialog.initOwner(((Node) mouseEvent.getSource()).getScene().getWindow());
-            vocabularyDialog.setScene(new Scene(allWordsDialogRoot));
-        }
-        vocabularyController.initializeNewList(vocabularyName);
-        vocabularyController.refreshList();
-        vocabularyController.lvAllWords.getSelectionModel().select(null);
-        vocabularyDialog.showAndWait();
-        vocabularyController.btnShowHide.setText("Hide");
-        storage.saveVocabulary(vocabularyName);
+        if (mouseEvent.getClickCount() == 2) {
+            if (newDirectoryDialog == null)
+                initializeNewDirectoryDialog((Stage) ((Node) mouseEvent.getSource()).getScene().getWindow());
+            txtDirectoryName.setText(storage.getVocabularies().get(lvAllDirectories.getSelectionModel().getSelectedIndex()));
+            newDirectoryDialog.setTitle("Edit directory");
+            txtDirectoryName.selectAll();
+            newDirectoryDialog.showAndWait();
+            refreshList();
         }
     }
 
