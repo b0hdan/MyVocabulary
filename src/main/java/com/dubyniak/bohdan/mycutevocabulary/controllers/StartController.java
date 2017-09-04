@@ -2,7 +2,6 @@ package com.dubyniak.bohdan.mycutevocabulary.controllers;
 
 import com.dubyniak.bohdan.mycutevocabulary.interfaces.Storage;
 import com.dubyniak.bohdan.mycutevocabulary.objects.TestMaker;
-import com.dubyniak.bohdan.mycutevocabulary.objects.VocabularyRecord;
 import com.dubyniak.bohdan.mycutevocabulary.services.FirebaseService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -44,7 +43,6 @@ public class StartController {
         FlashcardsController.setStorage(storage);
         TestMaker.setStorage(storage);
         StatisticController.setStorage(storage);
-//        fillTestData();
     }
 
     public void directoriesButtonClicked(ActionEvent actionEvent) throws IOException {
@@ -66,26 +64,7 @@ public class StartController {
     }
 
     public void flashcardsButtonClicked(ActionEvent actionEvent) throws IOException {
-        if (directoryChooserDialog == null) {
-            directoryChooserDialog = new Stage();
-            FXMLLoader directoryChooserFXMLLoader = new FXMLLoader(getClass().getResource("/directory-chooser.fxml"));
-            Parent root = directoryChooserFXMLLoader.load();
-            directoryChooserController = directoryChooserFXMLLoader.getController();
-            directoryChooserDialog.setTitle("Choose a directory");
-            directoryChooserDialog.setResizable(false);
-            directoryChooserDialog.initModality(Modality.APPLICATION_MODAL);
-            directoryChooserDialog.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
-            directoryChooserDialog.setScene(new Scene(root));
-            directoryChooserDialog.setOnCloseRequest(event -> {
-                directoryChooserController.setCloseButtonPressed(true);
-                directoryChooserController.choiceBox.getSelectionModel().select(null);
-            });
-        }
-        directoryChooserDialog.showAndWait();
-        if (directoryChooserController.isCloseButtonPressed()) {
-            directoryChooserController.setCloseButtonPressed(false);
-            return;
-        }
+        if (openDirectoryChooser(actionEvent)) return;
 
         if (flashcardsDialog == null) {
             flashcardsDialog = new Stage();
@@ -105,6 +84,8 @@ public class StartController {
     }
 
     public void testButtonClicked(ActionEvent actionEvent) throws IOException {
+        if (openDirectoryChooser(actionEvent)) return;
+
         if (storage.read().size() == 0) {
             new Alert(Alert.AlertType.ERROR, "Cannot start the test! Storage is empty.", ButtonType.OK).show();
             return;
@@ -131,20 +112,6 @@ public class StartController {
         ((Node) actionEvent.getSource()).getScene().getWindow().hide();
     }
 
-    private void fillTestData() {
-        storage.create(new VocabularyRecord("an apple", "яблуко"));
-        storage.create(new VocabularyRecord("a table", "стіл"));
-        storage.create(new VocabularyRecord("to write", "писати"));
-        storage.create(new VocabularyRecord("to walk", "гуляти"));
-        storage.create(new VocabularyRecord("a walk", "прогулянка"));
-        storage.create(new VocabularyRecord("sugar", "цукор"));
-        storage.create(new VocabularyRecord("salt", "сіль"));
-        storage.create(new VocabularyRecord("a program", "програма"));
-        storage.create(new VocabularyRecord("to work", "працювати"));
-        storage.create(new VocabularyRecord("a pen", "ручка"));
-        storage.create(new VocabularyRecord("a pencil", "олівець"));
-    }
-
     public void statisticButtonClicked(ActionEvent actionEvent) throws IOException {
         if (statisticDialog == null) {
             statisticDialog = new Stage();
@@ -160,5 +127,29 @@ public class StartController {
         statisticController.fillList();
         statisticController.tableView.getSelectionModel().clearSelection();
         statisticDialog.showAndWait();
+    }
+
+    private boolean openDirectoryChooser(ActionEvent actionEvent) throws IOException {
+        if (directoryChooserDialog == null) {
+            directoryChooserDialog = new Stage();
+            FXMLLoader directoryChooserFXMLLoader = new FXMLLoader(getClass().getResource("/directory-chooser.fxml"));
+            Parent root = directoryChooserFXMLLoader.load();
+            directoryChooserController = directoryChooserFXMLLoader.getController();
+            directoryChooserDialog.setTitle("Choose a directory");
+            directoryChooserDialog.setResizable(false);
+            directoryChooserDialog.initModality(Modality.APPLICATION_MODAL);
+            directoryChooserDialog.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
+            directoryChooserDialog.setScene(new Scene(root));
+            directoryChooserDialog.setOnCloseRequest(event -> {
+                directoryChooserController.setCloseButtonPressed(true);
+                directoryChooserController.choiceBox.getSelectionModel().select(null);
+            });
+        }
+        directoryChooserDialog.showAndWait();
+        if (directoryChooserController.isCloseButtonPressed()) {
+            directoryChooserController.setCloseButtonPressed(false);
+            return true;
+        }
+        return false;
     }
 }
