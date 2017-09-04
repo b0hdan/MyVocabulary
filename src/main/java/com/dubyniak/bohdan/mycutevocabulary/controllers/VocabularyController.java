@@ -55,13 +55,13 @@ public class VocabularyController {
     }
 
     public void minusButtonClicked(ActionEvent actionEvent) {
-        storage.deleteVocabulary(lvAllWords.getSelectionModel().getSelectedItem());
+        storage.delete(lvAllWords.getSelectionModel().getSelectedItem());
         refreshList();
     }
 
     public void onKeyReleased(KeyEvent keyEvent) {
         if (keyEvent.getCode().equals(KeyCode.DELETE)) {
-            storage.deleteVocabulary(lvAllWords.getSelectionModel().getSelectedItem());
+            storage.delete(lvAllWords.getSelectionModel().getSelectedItem());
             refreshList();
         }
         else if (keyEvent.getCode().isArrowKey())
@@ -128,7 +128,7 @@ public class VocabularyController {
 
     private void initializeNewWordDialog(Stage owner) throws IOException {
         newWordDialog = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("../fxml/new-word-dialog.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/new-word-dialog.fxml"));
         newWordDialog.setResizable(false);
         newWordDialog.initModality(Modality.APPLICATION_MODAL);
         newWordDialog.initOwner(owner);

@@ -22,7 +22,7 @@ public class FileStorage implements Storage {
     }
 
     @Override
-    public void createVocabulary(String vocabulary) {
+    public void create(String vocabulary) {
         vocabularies.add(vocabulary);
     }
 
@@ -37,19 +37,19 @@ public class FileStorage implements Storage {
     }
 
     @Override
-    public void updateVocabulary(String oldVocabularyName, String newVocabularyName) {
+    public void update(String oldVocabularyName, String newVocabularyName) {
         vocabularies.set(vocabularies.indexOf(oldVocabularyName), newVocabularyName);
         if (!new File(oldVocabularyName + ".dat").renameTo(new File(newVocabularyName + ".dat")))
             System.out.println("Не вдалося перейменувати файл.");
     }
 
     @Override
-    public void deleteVocabulary(VocabularyRecord record) {
+    public void delete(VocabularyRecord record) {
         vocabulary.remove(record);
     }
 
     @Override
-    public void deleteVocabulary(String vocabularyName) {
+    public void delete(String vocabularyName) {
         if (vocabularyName != null) {
             vocabularies.remove(vocabularyName);
             if (!new File(vocabularyName += ".dat").delete()) System.out.println("Не вдалося видалити файл " + vocabularyName);;
@@ -57,7 +57,7 @@ public class FileStorage implements Storage {
     }
 
     @Override
-    public int sizeOfActive() {
+    public int sizeOfShownRecords() {
         int counter = 0;
         for (VocabularyRecord record : vocabulary)
             if (record.isShown())

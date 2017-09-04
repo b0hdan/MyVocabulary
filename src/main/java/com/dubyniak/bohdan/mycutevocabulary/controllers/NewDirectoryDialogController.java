@@ -27,7 +27,7 @@ public class NewDirectoryDialogController {
                 if (directory.equalsIgnoreCase(temp))
                     return;
             }
-            storage.createVocabulary(temp);
+            storage.create(temp);
         }
         else {
             ListView<String> lv =
@@ -36,7 +36,7 @@ public class NewDirectoryDialogController {
                 if (!directory.equals(lv.getSelectionModel().getSelectedItem()) &&
                         (directory.equalsIgnoreCase(txtDirectoryName.getText())))
                     return;
-            storage.updateVocabulary(lv.getSelectionModel().getSelectedItem(), txtDirectoryName.getText());
+            storage.update(lv.getSelectionModel().getSelectedItem(), txtDirectoryName.getText());
         }
         storage.saveVocabulary(txtDirectoryName.getText());
         ((Node) actionEvent.getSource()).getScene().getWindow().hide();

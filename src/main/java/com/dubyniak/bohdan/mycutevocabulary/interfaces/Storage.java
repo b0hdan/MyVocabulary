@@ -8,23 +8,23 @@ public interface Storage {
 
     void create(VocabularyRecord record);
 
-    void createVocabulary(String vocabulary);
+    void create(String vocabulary);
 
     List<VocabularyRecord> read();
 
     void update(VocabularyRecord oldRecord, VocabularyRecord newRecord);
 
-    void updateVocabulary(String oldVocabulary, String newVocabulary);
+    void update(String oldVocabulary, String newVocabulary);
 
-    void deleteVocabulary(VocabularyRecord record);
+    void delete(VocabularyRecord record);
 
-    void deleteVocabulary(String vocabulary);
+    void delete(String vocabulary);
 
     void saveVocabulary(String vocabularyName);
 
-    int sizeOfActive();
+    int sizeOfShownRecords();
 
-    void loadVocabulary(String name);
+    void loadVocabulary(String vocabularyName);
 
     void saveVocabularies();
 

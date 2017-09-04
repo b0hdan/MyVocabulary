@@ -1,9 +1,9 @@
 package com.dubyniak.bohdan.mycutevocabulary.controllers;
 
 import com.dubyniak.bohdan.mycutevocabulary.interfaces.Storage;
-import com.dubyniak.bohdan.mycutevocabulary.interfaces.impls.FileStorage;
 import com.dubyniak.bohdan.mycutevocabulary.objects.TestMaker;
 import com.dubyniak.bohdan.mycutevocabulary.objects.VocabularyRecord;
+import com.dubyniak.bohdan.mycutevocabulary.services.FirebaseService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -35,7 +35,7 @@ public class StartController {
     private StatisticController statisticController;
 
     public StartController() {
-        storage = new FileStorage();
+        storage = new FirebaseService();
         DirectoriesController.setStorage(storage);
         NewDirectoryDialogController.setStorage(storage);
         VocabularyController.setStorage(storage);
@@ -50,7 +50,7 @@ public class StartController {
     public void directoriesButtonClicked(ActionEvent actionEvent) throws IOException {
         if (directoriesDialog == null) {
             directoriesDialog = new Stage();
-            FXMLLoader directoriesFXMLLoader = new FXMLLoader(getClass().getResource("../fxml/directories.fxml"));
+            FXMLLoader directoriesFXMLLoader = new FXMLLoader(getClass().getResource("/directories.fxml"));
             directoriesDialogRoot = directoriesFXMLLoader.load();
             directoriesController = directoriesFXMLLoader.getController();
             directoriesDialog.setTitle("All directories");
@@ -68,7 +68,7 @@ public class StartController {
     public void flashcardsButtonClicked(ActionEvent actionEvent) throws IOException {
         if (directoryChooserDialog == null) {
             directoryChooserDialog = new Stage();
-            FXMLLoader directoryChooserFXMLLoader = new FXMLLoader(getClass().getResource("../fxml/directory-chooser.fxml"));
+            FXMLLoader directoryChooserFXMLLoader = new FXMLLoader(getClass().getResource("/directory-chooser.fxml"));
             Parent root = directoryChooserFXMLLoader.load();
             directoryChooserController = directoryChooserFXMLLoader.getController();
             directoryChooserDialog.setTitle("Choose a directory");
@@ -89,7 +89,7 @@ public class StartController {
 
         if (flashcardsDialog == null) {
             flashcardsDialog = new Stage();
-            FXMLLoader flashcardsFXMLLoader = new FXMLLoader(getClass().getResource("../fxml/flashcards.fxml"));
+            FXMLLoader flashcardsFXMLLoader = new FXMLLoader(getClass().getResource("/flashcards.fxml"));
             Parent root = flashcardsFXMLLoader.load();
             flashcardsController = flashcardsFXMLLoader.getController();
             flashcardsDialog.setTitle("Flashcards");
@@ -110,7 +110,7 @@ public class StartController {
             return;
         } else if (testDialog == null) {
             testDialog = new Stage();
-            Parent root = FXMLLoader.load(getClass().getResource("../fxml/test.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/test.fxml"));
             testDialog.setTitle("Test");
             testDialog.setResizable(false);
             testDialog.initModality(Modality.APPLICATION_MODAL);
@@ -148,7 +148,7 @@ public class StartController {
     public void statisticButtonClicked(ActionEvent actionEvent) throws IOException {
         if (statisticDialog == null) {
             statisticDialog = new Stage();
-            FXMLLoader statisticFXMLLoader = new FXMLLoader(getClass().getResource("../fxml/statistic.fxml"));
+            FXMLLoader statisticFXMLLoader = new FXMLLoader(getClass().getResource("/statistic.fxml"));
             Parent root = statisticFXMLLoader.load();
             statisticController = statisticFXMLLoader.getController();
             statisticDialog.setTitle("Statistic");
