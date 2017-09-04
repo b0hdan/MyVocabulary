@@ -46,6 +46,11 @@ public class StartController {
     }
 
     public void directoriesButtonClicked(ActionEvent actionEvent) throws IOException {
+        if (storage.getVocabularies() == null) {
+            new Alert(Alert.AlertType.INFORMATION, "Data is loading from the server.\nPlease, try again.", ButtonType.OK).show();
+            return;
+        }
+
         if (directoriesDialog == null) {
             directoriesDialog = new Stage();
             FXMLLoader directoriesFXMLLoader = new FXMLLoader(getClass().getResource("/directories.fxml"));
@@ -66,6 +71,9 @@ public class StartController {
     public void flashcardsButtonClicked(ActionEvent actionEvent) throws IOException {
         if (openDirectoryChooser(actionEvent)) return;
 
+        if (storage.read().size() == 0)
+            new Alert(Alert.AlertType.INFORMATION, "Data is loading from the server.\nPlease, reopen this window.", ButtonType.OK).show();
+
         if (flashcardsDialog == null) {
             flashcardsDialog = new Stage();
             FXMLLoader flashcardsFXMLLoader = new FXMLLoader(getClass().getResource("/flashcards.fxml"));
@@ -85,6 +93,9 @@ public class StartController {
 
     public void testButtonClicked(ActionEvent actionEvent) throws IOException {
         if (openDirectoryChooser(actionEvent)) return;
+
+        if (storage.read().size() == 0)
+            new Alert(Alert.AlertType.INFORMATION, "Data is loading from the server.\nPlease, reopen this window.", ButtonType.OK).show();
 
         if (storage.read().size() == 0) {
             new Alert(Alert.AlertType.ERROR, "Cannot start the test! Storage is empty.", ButtonType.OK).show();
@@ -108,11 +119,12 @@ public class StartController {
         testDialog.show();
     }
 
-    public void closeButtonClicked(ActionEvent actionEvent) {
-        ((Node) actionEvent.getSource()).getScene().getWindow().hide();
-    }
-
     public void statisticButtonClicked(ActionEvent actionEvent) throws IOException {
+        if (storage.getVocabularies() == null) {
+            new Alert(Alert.AlertType.INFORMATION, "Data is loading from the server.\nPlease, try again.", ButtonType.OK).show();
+            return;
+        }
+
         if (statisticDialog == null) {
             statisticDialog = new Stage();
             FXMLLoader statisticFXMLLoader = new FXMLLoader(getClass().getResource("/statistic.fxml"));
@@ -129,7 +141,16 @@ public class StartController {
         statisticDialog.showAndWait();
     }
 
+    public void closeButtonClicked(ActionEvent actionEvent) {
+        ((Node) actionEvent.getSource()).getScene().getWindow().hide();
+    }
+
     private boolean openDirectoryChooser(ActionEvent actionEvent) throws IOException {
+        if (storage.getVocabularies() == null) {
+            new Alert(Alert.AlertType.INFORMATION, "Data is loading from the server.\nPlease, try again.", ButtonType.OK).show();
+            return true;
+        }
+
         if (directoryChooserDialog == null) {
             directoryChooserDialog = new Stage();
             FXMLLoader directoryChooserFXMLLoader = new FXMLLoader(getClass().getResource("/directory-chooser.fxml"));

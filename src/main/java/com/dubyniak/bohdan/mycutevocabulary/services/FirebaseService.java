@@ -17,8 +17,8 @@ public class FirebaseService implements Storage {
     private DatabaseReference dbReference;
     private DatabaseReference userReference;
     private DatabaseReference vocabularyReference;
-    private List<VocabularyRecord> vocabulary = new ArrayList<>();
-    private List<String> vocabularies = new ArrayList<>();
+    private List<VocabularyRecord> vocabulary;
+    private List<String> vocabularies;
     private String lastVocabularyName;
     private String currentUser = "someone";
 
@@ -32,7 +32,7 @@ public class FirebaseService implements Storage {
         userReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                vocabularies.clear();
+                vocabularies = new ArrayList<>();
                 for (DataSnapshot child : dataSnapshot.getChildren())
                     vocabularies.add(child.getKey());
                 userReference.removeEventListener(this);
@@ -132,6 +132,8 @@ public class FirebaseService implements Storage {
     public void loadVocabulary(String vocabularyName) {
         lastVocabularyName = vocabularyName;
         vocabularyReference = userReference.child(vocabularyName);
+        vocabulary = new ArrayList<>();
+        vocabulary.clear();
         vocabularyReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

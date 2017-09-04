@@ -69,6 +69,11 @@ public class DirectoriesController {
             return;
         String vocabularyName = lvAllDirectories.getSelectionModel().getSelectedItem();
         storage.loadVocabulary(vocabularyName);
+
+        if (storage.read().size() == 0) {
+            new Alert(Alert.AlertType.INFORMATION, "Data is loading from the server.\nPlease, reopen this window.", ButtonType.OK).show();
+        }
+
         if (vocabularyDialog == null) {
             vocabularyDialog = new Stage();
             FXMLLoader vocabularyFXMLLoader = new FXMLLoader(getClass().getResource("/my-vocabulary.fxml"));
