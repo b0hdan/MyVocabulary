@@ -4,6 +4,7 @@ import com.dubyniak.bohdan.mycutevocabulary.interfaces.Storage;
 import com.dubyniak.bohdan.mycutevocabulary.objects.TestMaker;
 import com.dubyniak.bohdan.mycutevocabulary.services.FirebaseService;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -24,6 +25,7 @@ public class StartController {
     private Stage flashcardsDialog;
     private Stage statisticDialog;
     private Stage testDialog;
+    private Stage loadingDataDialog;
     static Parent directoriesDialogRoot;
     private Label lblQuestion;
     private Label lblCount;
@@ -45,17 +47,18 @@ public class StartController {
         StatisticController.setStorage(storage);
     }
 
-    public void directoriesButtonClicked(ActionEvent actionEvent) throws IOException {
-        if (storage.getVocabularies() == null) {
-            new Alert(Alert.AlertType.INFORMATION, "Data is loading from the server.\nPlease, try again.", ButtonType.OK).show();
-            return;
-        }
+    public void directoriesButtonClicked(ActionEvent actionEvent) throws IOException, InterruptedException {
+        if (storage.getVocabularies() == null)
+            openLoadingDataDialog(actionEvent);
 
         if (directoriesDialog == null) {
             directoriesDialog = new Stage();
             FXMLLoader directoriesFXMLLoader = new FXMLLoader(getClass().getResource("/directories.fxml"));
             directoriesDialogRoot = directoriesFXMLLoader.load();
             directoriesController = directoriesFXMLLoader.getController();
+            Stage temp = new Stage();
+            ((FirebaseService) storage).setLoadingDataDialog(temp);
+            directoriesController.setLoadingDataDialog(temp);
             directoriesDialog.setTitle("All directories");
             directoriesDialog.setResizable(false);
             directoriesDialog.initModality(Modality.APPLICATION_MODAL);
@@ -69,10 +72,10 @@ public class StartController {
     }
 
     public void flashcardsButtonClicked(ActionEvent actionEvent) throws IOException {
-        if (openDirectoryChooser(actionEvent)) return;
+        if (storage.read() == null)
+            openLoadingDataDialog(actionEvent);
 
-        if (storage.read().size() == 0)
-            new Alert(Alert.AlertType.INFORMATION, "Data is loading from the server.\nPlease, reopen this window.", ButtonType.OK).show();
+        if (openDirectoryChooser(actionEvent)) return;
 
         if (flashcardsDialog == null) {
             flashcardsDialog = new Stage();
@@ -92,10 +95,10 @@ public class StartController {
     }
 
     public void testButtonClicked(ActionEvent actionEvent) throws IOException {
-        if (openDirectoryChooser(actionEvent)) return;
+        if (storage.read() == null)
+            openLoadingDataDialog(actionEvent);
 
-        if (storage.read().size() == 0)
-            new Alert(Alert.AlertType.INFORMATION, "Data is loading from the server.\nPlease, reopen this window.", ButtonType.OK).show();
+        if (openDirectoryChooser(actionEvent)) return;
 
         if (storage.read().size() == 0) {
             new Alert(Alert.AlertType.ERROR, "Cannot start the test! Storage is empty.", ButtonType.OK).show();
@@ -120,10 +123,8 @@ public class StartController {
     }
 
     public void statisticButtonClicked(ActionEvent actionEvent) throws IOException {
-        if (storage.getVocabularies() == null) {
-            new Alert(Alert.AlertType.INFORMATION, "Data is loading from the server.\nPlease, try again.", ButtonType.OK).show();
-            return;
-        }
+        if (storage.getVocabularies() == null)
+            openLoadingDataDialog(actionEvent);
 
         if (statisticDialog == null) {
             statisticDialog = new Stage();
@@ -147,8 +148,7 @@ public class StartController {
 
     private boolean openDirectoryChooser(ActionEvent actionEvent) throws IOException {
         if (storage.getVocabularies() == null) {
-            new Alert(Alert.AlertType.INFORMATION, "Data is loading from the server.\nPlease, try again.", ButtonType.OK).show();
-            return true;
+            openLoadingDataDialog(actionEvent);
         }
 
         if (directoryChooserDialog == null) {
@@ -156,6 +156,7 @@ public class StartController {
             FXMLLoader directoryChooserFXMLLoader = new FXMLLoader(getClass().getResource("/directory-chooser.fxml"));
             Parent root = directoryChooserFXMLLoader.load();
             directoryChooserController = directoryChooserFXMLLoader.getController();
+            directoryChooserController.setLoadingDataDialog(loadingDataDialog);
             directoryChooserDialog.setTitle("Choose a directory");
             directoryChooserDialog.setResizable(false);
             directoryChooserDialog.initModality(Modality.APPLICATION_MODAL);
@@ -172,5 +173,22 @@ public class StartController {
             return true;
         }
         return false;
+    }
+
+    private void openLoadingDataDialog(ActionEvent actionEvent) throws IOException {
+        if (loadingDataDialog == null) {
+            loadingDataDialog = new Stage();
+            ((FirebaseService) storage).setLoadingDataDialog(loadingDataDialog);
+            Parent root = FXMLLoader.load(getClass().getResource("/loading-data.fxml"));
+            loadingDataDialog.setTitle("Loading");
+            loadingDataDialog.setResizable(false);
+            loadingDataDialog.initModality(Modality.APPLICATION_MODAL);
+            loadingDataDialog.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
+            loadingDataDialog.setScene(new Scene(root));
+            loadingDataDialog.setOnCloseRequest(Event::consume);
+        }
+        if (directoriesController != null)
+            directoriesController.setLoadingDataDialog(loadingDataDialog);
+        loadingDataDialog.showAndWait();
     }
 }

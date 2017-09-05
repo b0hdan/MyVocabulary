@@ -6,6 +6,8 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseCredentials;
 import com.google.firebase.database.*;
+import javafx.application.Platform;
+import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -17,10 +19,11 @@ public class FirebaseService implements Storage {
     private DatabaseReference dbReference;
     private DatabaseReference userReference;
     private DatabaseReference vocabularyReference;
-    private List<VocabularyRecord> vocabulary = new ArrayList<>();
+    private List<VocabularyRecord> vocabulary;
     private List<String> vocabularies;
     private String lastVocabularyName;
     private String currentUser = "someone";
+    private Stage loadingDataDialog;
 
     public FirebaseService() {
         connectToDatabase();
@@ -35,6 +38,7 @@ public class FirebaseService implements Storage {
                 vocabularies = new ArrayList<>();
                 for (DataSnapshot child : dataSnapshot.getChildren())
                     vocabularies.add(child.getKey());
+                Platform.runLater(loadingDataDialog::close);
                 userReference.removeEventListener(this);
             }
 
@@ -42,6 +46,10 @@ public class FirebaseService implements Storage {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+    }
+
+    public void setLoadingDataDialog(Stage loadingDataDialog) {
+        this.loadingDataDialog = loadingDataDialog;
     }
 
     private void connectToDatabase() {
@@ -132,13 +140,14 @@ public class FirebaseService implements Storage {
     public void loadVocabulary(String vocabularyName) {
         lastVocabularyName = vocabularyName;
         vocabularyReference = userReference.child(vocabularyName);
-        vocabulary.clear();
+        vocabulary = null;
         vocabularyReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                vocabulary.clear();
+                vocabulary = new ArrayList<>();
                 for (DataSnapshot child : dataSnapshot.getChildren())
                     vocabulary.add(child.getValue(VocabularyRecord.class));
+                Platform.runLater(loadingDataDialog::close);
                 vocabularyReference.removeEventListener(this);
             }
 

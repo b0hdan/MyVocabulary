@@ -4,6 +4,7 @@ import com.dubyniak.bohdan.mycutevocabulary.interfaces.Storage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -31,6 +32,7 @@ public class DirectoriesController {
     private Stage vocabularyDialog;
     static Parent allWordsDialogRoot;
     private VocabularyController vocabularyController;
+    private Stage loadingDataDialog;
 
     @FXML
     ListView<String> lvAllDirectories;
@@ -44,6 +46,10 @@ public class DirectoriesController {
 
     static void setStorage(Storage storage) {
         DirectoriesController.storage = storage;
+    }
+
+    void setLoadingDataDialog(Stage loadingDataDialog) {
+        this.loadingDataDialog = loadingDataDialog;
     }
 
     public void plusButtonClicked(ActionEvent actionEvent) throws IOException {
@@ -70,9 +76,7 @@ public class DirectoriesController {
         String vocabularyName = lvAllDirectories.getSelectionModel().getSelectedItem();
         storage.loadVocabulary(vocabularyName);
 
-        if (storage.read().size() == 0) {
-            new Alert(Alert.AlertType.INFORMATION, "Data is loading from the server.\nPlease, reopen this window.", ButtonType.OK).show();
-        }
+        openLoadingDataDialog(actionEvent);
 
         if (vocabularyDialog == null) {
             vocabularyDialog = new Stage();
@@ -147,5 +151,14 @@ public class DirectoriesController {
             txtDirectoryName.clear();
             txtDirectoryName.requestFocus();
         });
+    }
+
+    private void openLoadingDataDialog(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/loading-data.fxml"));
+        loadingDataDialog.setTitle("Loading");
+        loadingDataDialog.setResizable(false);
+        loadingDataDialog.setScene(new Scene(root));
+        loadingDataDialog.setOnCloseRequest(Event::consume);
+        loadingDataDialog.showAndWait();
     }
 }
