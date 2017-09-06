@@ -156,7 +156,9 @@ public class StartController {
             FXMLLoader directoryChooserFXMLLoader = new FXMLLoader(getClass().getResource("/directory-chooser.fxml"));
             Parent root = directoryChooserFXMLLoader.load();
             directoryChooserController = directoryChooserFXMLLoader.getController();
-            directoryChooserController.setLoadingDataDialog(loadingDataDialog);
+            Stage temp = new Stage();
+            ((FirebaseService) storage).setLoadingDataDialog(temp);
+            directoryChooserController.setLoadingDataDialog(temp);
             directoryChooserDialog.setTitle("Choose a directory");
             directoryChooserDialog.setResizable(false);
             directoryChooserDialog.initModality(Modality.APPLICATION_MODAL);
@@ -189,6 +191,8 @@ public class StartController {
         }
         if (directoriesController != null)
             directoriesController.setLoadingDataDialog(loadingDataDialog);
+        if (directoryChooserController != null)
+            directoryChooserController.setLoadingDataDialog(loadingDataDialog);
         loadingDataDialog.showAndWait();
     }
 }
