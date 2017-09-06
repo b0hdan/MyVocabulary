@@ -72,7 +72,7 @@ public class StartController {
     }
 
     public void flashcardsButtonClicked(ActionEvent actionEvent) throws IOException {
-        if (storage.read() == null)
+        if (storage.getVocabularies() == null)
             openLoadingDataDialog(actionEvent);
 
         if (openDirectoryChooser(actionEvent)) return;
@@ -95,7 +95,7 @@ public class StartController {
     }
 
     public void testButtonClicked(ActionEvent actionEvent) throws IOException {
-        if (storage.read() == null)
+        if (storage.getVocabularies() == null)
             openLoadingDataDialog(actionEvent);
 
         if (openDirectoryChooser(actionEvent)) return;
