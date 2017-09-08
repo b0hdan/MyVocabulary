@@ -8,7 +8,7 @@ public class VocabularyRecord implements Serializable {
     public static final int[] LEVELS_OF_POSTPONING = { 1, 3, 7, 14, 30, 60 };
     private String foreignWord;
     private String definition;
-    private String hiddenPrefix;
+    private String hiddenPrefix = "";
     private boolean isShown = true;
     private Date showDate;
     private int rememberingLevel;
